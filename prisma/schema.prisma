@@ -1,0 +1,251 @@
+// MSWD Integrated Services Portal (MISP) - Prisma Schema
+// Supabase PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+//  ENUMS
+// ─────────────────────────────────────────────
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  REGISTERED_USER
+  GUEST
+}
+
+enum ApplicationStatus {
+  PENDING
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  DISBURSED
+}
+
+enum BenefitCategory {
+  FINANCIAL_ASSISTANCE
+  MEDICAL_ASSISTANCE
+  SENIOR_CITIZEN
+  PWD_ASSISTANCE
+}
+
+enum DocumentType {
+  VALID_ID
+  PROOF_OF_RESIDENCY
+  MEDICAL_CERTIFICATE
+  PWD_ID
+  SENIOR_CITIZEN_ID
+  INCOME_CERTIFICATE
+  BIRTH_CERTIFICATE
+  OTHER
+}
+
+enum DocumentStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+// ─────────────────────────────────────────────
+//  USER
+// ─────────────────────────────────────────────
+
+model User {
+  id                 String    @id @default(uuid())
+  supabaseId         String    @unique  // links to auth.users in Supabase
+  email              String    @unique
+  firstName          String
+  lastName           String
+  middleName         String?
+  contactNumber      String?
+  role               Role      @default(REGISTERED_USER)
+
+  // Address fields (used for GIS residency verification)
+  houseNo            String?
+  street             String?
+  barangay           String?
+  city               String    @default("Makati City")
+  province           String    @default("Metro Manila")
+  zipCode            String?
+  latitude           Float?
+  longitude          Float?
+  residencyVerified  Boolean   @default(false)
+
+  // PH Data Privacy Act compliance
+  consentGiven       Boolean   @default(false)
+  consentDate        DateTime?
+
+  isActive           Boolean   @default(true)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  // Relations
+  applications       Application[]
+  documents          Document[]
+  residencyChecks    ResidencyVerification[]
+
+  @@map("users")
+}
+
+// ─────────────────────────────────────────────
+//  BENEFIT PROGRAM
+// ─────────────────────────────────────────────
+
+model BenefitProgram {
+  id               String          @id @default(uuid())
+  name             String
+  category         BenefitCategory
+  description      String
+  requirements     String[]        // list of required documents
+  maxAmount        Float?          // max financial assistance (if applicable)
+  isActive         Boolean         @default(true)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  // Relations
+  applications     Application[]
+
+  @@map("benefit_programs")
+}
+
+// ─────────────────────────────────────────────
+//  APPLICATION
+// ─────────────────────────────────────────────
+
+model Application {
+  id                 String            @id @default(uuid())
+  referenceNumber    String            @unique @default(cuid())
+  userId             String
+  benefitProgramId   String
+  status             ApplicationStatus @default(PENDING)
+
+  // Applicant snapshot (denormalized for record integrity)
+  applicantName      String
+  applicantContact   String?
+  applicantBarangay  String?
+  applicantAddress   String?
+
+  // Purpose / reason
+  purpose            String
+  amountRequested    Float?
+  amountApproved     Float?
+  remarks            String?
+
+  // Staff handling
+  reviewedBy         String?          // Admin user ID
+  reviewedAt         DateTime?
+  approvedAt         DateTime?
+  disbursedAt        DateTime?
+
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  // Relations
+  user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  benefitProgram     BenefitProgram   @relation(fields: [benefitProgramId], references: [id])
+  documents          Document[]
+  statusHistory      ApplicationStatusHistory[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([referenceNumber])
+  @@map("applications")
+}
+
+// ─────────────────────────────────────────────
+//  APPLICATION STATUS HISTORY (AUDIT LOG)
+// ─────────────────────────────────────────────
+
+model ApplicationStatusHistory {
+  id            String            @id @default(uuid())
+  applicationId String
+  fromStatus    ApplicationStatus?
+  toStatus      ApplicationStatus
+  changedBy     String            // Admin user ID
+  remarks       String?
+  changedAt     DateTime          @default(now())
+
+  application   Application       @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId])
+  @@map("application_status_history")
+}
+
+// ─────────────────────────────────────────────
+//  DOCUMENT
+// ─────────────────────────────────────────────
+
+model Document {
+  id              String         @id @default(uuid())
+  userId          String
+  applicationId   String?
+  type            DocumentType
+  status          DocumentStatus @default(PENDING)
+
+  fileName        String
+  fileUrl         String         // Supabase Storage public/signed URL
+  fileSize        Int            // bytes
+  mimeType        String
+
+  // Verification
+  verifiedBy      String?
+  verifiedAt      DateTime?
+  rejectionReason String?
+
+  // PH Data Privacy – document expiry tracking
+  expiresAt       DateTime?
+
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application     Application?   @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([applicationId])
+  @@map("documents")
+}
+
+// ─────────────────────────────────────────────
+//  RESIDENCY VERIFICATION (GIS)
+// ─────────────────────────────────────────────
+
+model ResidencyVerification {
+  id              String   @id @default(uuid())
+  userId          String
+  latitude        Float
+  longitude       Float
+  address         String
+  isWithinMakati  Boolean
+  verifiedAt      DateTime @default(now())
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("residency_verifications")
+}
+
+// ─────────────────────────────────────────────
+//  ANNOUNCEMENT (Public-facing)
+// ─────────────────────────────────────────────
+
+model Announcement {
+  id          String   @id @default(uuid())
+  title       String
+  content     String
+  imageUrl    String?
+  isPublished Boolean  @default(false)
+  publishedAt DateTime?
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("announcements")
+}
