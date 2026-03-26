@@ -31,12 +31,34 @@ export default function LoginForm() {
         setError(
           authError.message === "Invalid login credentials"
             ? "Incorrect email or password. Please try again."
+            : authError.message === "Email not confirmed"
+            ? "Your email is not yet confirmed. Ask your administrator to confirm it in Supabase."
             : authError.message
         );
         return;
       }
 
-      router.push("/dashboard");
+      // Fetch the user's role and route them correctly.
+      const { data: { user: authedUser } } = await supabase.auth.getUser();
+      const { data: profile } = await supabase
+        .from("users")
+        .select("role")
+        .eq("supabaseId", authedUser?.id ?? "")
+        .single();
+
+      const role = profile?.role;
+
+      // Staff accounts belong in the Admin Portal — block them here and tell
+      // them where to go instead.
+      if (role === "SUPER_ADMIN" || role === "ADMIN") {
+        await supabase.auth.signOut();
+        setError(
+          "This account is registered as MSWD staff. Please sign in at the Admin Portal (port 3001) instead."
+        );
+        return;
+      }
+
+      router.push(role === "GUEST" ? "/guest" : "/dashboard");
       router.refresh();
     } catch {
       setError("An unexpected error occurred. Please try again.");

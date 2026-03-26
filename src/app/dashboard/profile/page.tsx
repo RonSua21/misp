@@ -1,5 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { getMispUser } from "@/lib/auth-cache";
 import { redirect } from "next/navigation";
 import { CheckCircle2, XCircle } from "lucide-react";
 import AddressVerification from "@/components/dashboard/AddressVerification";
@@ -8,18 +7,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = { title: "Profile — MISP" };
 
 export default async function ProfilePage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-
-  const db = createAdminClient();
-
-  const { data: profile } = await db
-    .from("users")
-    .select("id, firstName, lastName, middleName, email, contactNumber, houseNo, street, barangay, city, province, residencyVerified, role, createdAt")
-    .eq("supabaseId", user.id)
-    .single();
-
+  const profile = await getMispUser();
   if (!profile) redirect("/login");
 
   return (

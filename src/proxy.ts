@@ -1,9 +1,10 @@
-import { type NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { NextResponse, type NextRequest } from "next/server";
 
 export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
+  // Required by @supabase/ssr — refreshes the session cookie on every request.
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -12,34 +13,32 @@ export async function proxy(request: NextRequest) {
         getAll() {
           return request.cookies.getAll();
         },
-        setAll(cookiesToSet: { name: string; value: string; options?: Record<string, unknown> }[]) {
+        setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
           supabaseResponse = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options as Parameters<typeof supabaseResponse.cookies.set>[2])
+            supabaseResponse.cookies.set(name, value, options)
           );
         },
       },
     }
   );
 
+  // DO NOT remove — keeps the session alive.
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
 
-  // Protected routes — redirect unauthenticated users to login
+  // Unauthenticated users cannot access the dashboard.
   if (!user && pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
-  if (!user && pathname.startsWith("/admin")) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
 
-  // Redirect already-authenticated users away from auth pages
+  // Logged-in users are sent to the dashboard from auth pages.
   if (user && (pathname === "/login" || pathname === "/register")) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }

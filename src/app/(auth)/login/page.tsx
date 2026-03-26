@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ShieldCheck } from "lucide-react";
+import { ShieldCheck, AlertTriangle } from "lucide-react";
 import LoginForm from "@/components/auth/LoginForm";
 import type { Metadata } from "next";
 
@@ -7,7 +7,19 @@ export const metadata: Metadata = {
   title: "Login — MISP",
 };
 
-export default function LoginPage() {
+const ERROR_MESSAGES: Record<string, string> = {
+  "use-admin-portal":
+    "Staff accounts cannot access the Resident Portal. Please use the Admin Portal instead.",
+};
+
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { error } = await searchParams;
+  const errorMessage = error ? ERROR_MESSAGES[error] : null;
+
   return (
     <div className="min-h-screen bg-makati-gray flex">
       {/* Left panel — branding */}
@@ -71,6 +83,13 @@ export default function LoginPage() {
             <p className="text-gray-500 text-sm mb-7">
               Sign in to your MISP account to manage your applications.
             </p>
+
+            {errorMessage && (
+              <div className="flex items-start gap-2.5 p-3.5 mb-5 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
+                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" />
+                {errorMessage}
+              </div>
+            )}
 
             <LoginForm />
           </div>

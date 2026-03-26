@@ -115,3 +115,72 @@ export interface DashboardStats {
   rejected: number;
   disbursed: number;
 }
+
+// ─── Disaster & Relief ────────────────────────────────────────────────────────
+
+export type DisasterType =
+  | "TYPHOON"
+  | "FIRE"
+  | "FLOOD"
+  | "EARTHQUAKE"
+  | "LANDSLIDE"
+  | "OTHER";
+
+export type IncidentStatus = "ACTIVE" | "MONITORING" | "RESOLVED";
+
+export interface DisasterIncident {
+  id: string;
+  title: string;
+  type: DisasterType;
+  description?: string;
+  barangay?: string;
+  status: IncidentStatus;
+  reportedAt: string;
+  resolvedAt?: string;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  evacuationCenters?: EvacuationCenter[];
+  reliefInventory?: ReliefInventory[];
+}
+
+export interface EvacuationCenter {
+  id: string;
+  disasterIncidentId?: string;
+  name: string;
+  address: string;
+  barangay: string;
+  capacity: number;
+  currentHeadcount: number;
+  isOpen: boolean;
+  latitude?: number;
+  longitude?: number;
+  contactPerson?: string;
+  contactNumber?: string;
+  createdAt: string;
+  updatedAt: string;
+  evacuees?: Evacuee[];
+}
+
+export interface Evacuee {
+  id: string;
+  evacuationCenterId: string;
+  name: string;
+  age?: number;
+  barangay?: string;
+  headCount: number;
+  registeredAt: string;
+}
+
+export interface ReliefInventory {
+  id: string;
+  disasterIncidentId?: string;
+  itemName: string;
+  unit: string;
+  quantityAvailable: number;
+  quantityDistributed: number;
+  barangay?: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}

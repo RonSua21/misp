@@ -5,9 +5,7 @@ import {
   Stethoscope,
   Users,
   Accessibility,
-  FileText,
   ShieldCheck,
-  ClipboardList,
   MapPin,
   CheckCircle2,
   ChevronRight,
@@ -129,88 +127,42 @@ export default function LandingPage() {
         </div>
 
         <div className="container-max section relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left copy */}
-            <div className="text-white">
-              <div className="inline-flex items-center gap-2 bg-white/10 text-blue-100 text-xs font-medium px-3 py-1.5 rounded-full mb-6 border border-white/20">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                Secure · Official · Makati City Government
-              </div>
-
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
-                Social Welfare{" "}
-                <span className="text-makati-gold">Services</span>{" "}
-                Made Accessible
-              </h1>
-
-              <p className="text-blue-100 text-lg leading-relaxed mb-8 max-w-lg">
-                Apply for financial, medical, senior citizen, and PWD assistance
-                programs online — anytime, anywhere. The MSWD Integrated Services
-                Portal serves every Makati City resident.
-              </p>
-
-              <div className="flex flex-wrap gap-3">
-                <Link href="/register" className="btn-primary bg-makati-gold text-makati-blue hover:bg-yellow-400 text-base px-8 py-3">
-                  Get Started
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-                <Link href="#services" className="btn-secondary bg-transparent text-white border-white/50 hover:bg-white/10 text-base px-8 py-3">
-                  View Services
-                </Link>
-              </div>
-
-              {/* Trust badges */}
-              <div className="mt-10 flex flex-wrap gap-4">
-                {["Data Privacy Act Compliant", "SSL Secured", "Gov-PH Verified"].map((badge) => (
-                  <div key={badge} className="flex items-center gap-1.5 text-blue-200 text-xs">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-makati-gold" />
-                    {badge}
-                  </div>
-                ))}
-              </div>
+          <div className="max-w-3xl mx-auto text-center text-white">
+            <div className="inline-flex items-center gap-2 bg-white/10 text-blue-100 text-xs font-medium px-3 py-1.5 rounded-full mb-6 border border-white/20">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              Secure · Official · Makati City Government
             </div>
 
-            {/* Right — application tracker preview card */}
-            <div className="hidden lg:flex justify-center">
-              <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm">
-                <div className="flex items-center justify-between mb-5">
-                  <div>
-                    <p className="text-xs text-gray-500 font-medium">Application Tracker</p>
-                    <p className="text-sm font-bold text-gray-900 mt-0.5">REF-2025-00142</p>
-                  </div>
-                  <span className="badge-approved text-xs">Approved</span>
-                </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+              Social Welfare{" "}
+              <span className="text-makati-gold">Services</span>{" "}
+              Made Accessible
+            </h1>
 
-                <div className="space-y-3">
-                  {[
-                    { label: "Submitted",    date: "Mar 1, 2025",  done: true },
-                    { label: "Under Review", date: "Mar 5, 2025",  done: true },
-                    { label: "Approved",     date: "Mar 10, 2025", done: true },
-                    { label: "Disbursed",    date: "Pending",      done: false },
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3">
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${item.done ? "bg-green-100" : "bg-gray-100"}`}>
-                        {item.done ? (
-                          <CheckCircle2 className="w-4 h-4 text-green-600" />
-                        ) : (
-                          <Clock className="w-4 h-4 text-gray-400" />
-                        )}
-                      </div>
-                      <div className="flex-1 flex items-center justify-between">
-                        <span className={`text-sm font-medium ${item.done ? "text-gray-900" : "text-gray-400"}`}>
-                          {item.label}
-                        </span>
-                        <span className="text-xs text-gray-400">{item.date}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+            <p className="text-blue-100 text-lg leading-relaxed mb-8 max-w-2xl mx-auto">
+              Apply for financial, medical, senior citizen, and PWD assistance
+              programs online — anytime, anywhere. The MSWD Integrated Services
+              Portal serves every Makati City resident.
+            </p>
 
-                <div className="mt-5 pt-4 border-t border-gray-100">
-                  <p className="text-xs text-gray-500 font-medium mb-1">Program</p>
-                  <p className="text-sm font-semibold text-makati-blue">Financial Assistance</p>
+            <div className="flex flex-wrap gap-3 justify-center">
+              <Link href="/register" className="btn-primary bg-makati-gold text-makati-blue hover:bg-yellow-400 text-base px-8 py-3">
+                Get Started
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link href="#services" className="btn-secondary bg-transparent text-white border-white/50 hover:bg-white/10 text-base px-8 py-3">
+                View Services
+              </Link>
+            </div>
+
+            {/* Trust badges */}
+            <div className="mt-10 flex flex-wrap gap-4 justify-center">
+              {["Data Privacy Act Compliant", "SSL Secured", "Gov-PH Verified"].map((badge) => (
+                <div key={badge} className="flex items-center gap-1.5 text-blue-200 text-xs">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-makati-gold" />
+                  {badge}
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

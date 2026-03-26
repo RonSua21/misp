@@ -91,6 +91,10 @@ model User {
   documents          Document[]
   residencyChecks    ResidencyVerification[]
 
+  @@index([role])
+  @@index([barangay])
+  @@index([residencyVerified])
+  @@index([createdAt])
   @@map("users")
 }
 
@@ -156,6 +160,9 @@ model Application {
   @@index([userId])
   @@index([status])
   @@index([referenceNumber])
+  @@index([applicantBarangay])
+  @@index([benefitProgramId])
+  @@index([createdAt])
   @@map("applications")
 }
 
@@ -210,6 +217,8 @@ model Document {
 
   @@index([userId])
   @@index([applicationId])
+  @@index([status])
+  @@index([createdAt])
   @@map("documents")
 }
 
@@ -248,4 +257,103 @@ model Announcement {
   updatedAt   DateTime @updatedAt
 
   @@map("announcements")
+}
+
+// ─────────────────────────────────────────────
+//  DISASTER & RELIEF MANAGEMENT
+// ─────────────────────────────────────────────
+
+enum DisasterType {
+  TYPHOON
+  FIRE
+  FLOOD
+  EARTHQUAKE
+  LANDSLIDE
+  OTHER
+}
+
+enum IncidentStatus {
+  ACTIVE
+  MONITORING
+  RESOLVED
+}
+
+model DisasterIncident {
+  id          String         @id @default(uuid())
+  title       String
+  type        DisasterType
+  description String?
+  barangay    String?        // primarily affected barangay
+  status      IncidentStatus @default(ACTIVE)
+  reportedAt  DateTime       @default(now())
+  resolvedAt  DateTime?
+  createdBy   String         // admin user ID
+
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  evacuationCenters EvacuationCenter[]
+  reliefInventory   ReliefInventory[]
+
+  @@index([status])
+  @@map("disaster_incidents")
+}
+
+model EvacuationCenter {
+  id                   String            @id @default(uuid())
+  disasterIncidentId   String?
+  name                 String
+  address              String
+  barangay             String
+  capacity             Int
+  currentHeadcount     Int               @default(0)
+  isOpen               Boolean           @default(true)
+  latitude             Float?
+  longitude            Float?
+  contactPerson        String?
+  contactNumber        String?
+
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+
+  incident             DisasterIncident? @relation(fields: [disasterIncidentId], references: [id], onDelete: SetNull)
+  evacuees             Evacuee[]
+
+  @@index([disasterIncidentId])
+  @@index([barangay])
+  @@map("evacuation_centers")
+}
+
+model Evacuee {
+  id                   String           @id @default(uuid())
+  evacuationCenterId   String
+  name                 String
+  age                  Int?
+  barangay             String?          // evacuee's home barangay
+  headCount            Int              @default(1) // total family members
+  registeredAt         DateTime         @default(now())
+
+  evacuationCenter     EvacuationCenter @relation(fields: [evacuationCenterId], references: [id], onDelete: Cascade)
+
+  @@index([evacuationCenterId])
+  @@map("evacuees")
+}
+
+model ReliefInventory {
+  id                   String            @id @default(uuid())
+  disasterIncidentId   String?
+  itemName             String
+  unit                 String            // e.g., "packs", "kg", "boxes"
+  quantityAvailable    Int               @default(0)
+  quantityDistributed  Int               @default(0)
+  barangay             String?           // target distribution barangay
+  notes                String?
+
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+
+  incident             DisasterIncident? @relation(fields: [disasterIncidentId], references: [id], onDelete: SetNull)
+
+  @@index([disasterIncidentId])
+  @@map("relief_inventory")
 }

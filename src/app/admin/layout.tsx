@@ -1,22 +1,12 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { getMispUser } from "@/lib/auth-cache";
 import AdminNav from "@/components/layout/AdminNav";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  const dbUser = await getMispUser();
 
-  const db = createAdminClient();
-  const { data: dbUser } = await db
-    .from("users")
-    .select("role, firstName, lastName, email, barangay")
-    .eq("supabaseId", user.id)
-    .single();
-
-  // Only SUPER_ADMIN and ADMIN (barangay coordinator) can access /admin
-  if (!dbUser || (dbUser.role !== "SUPER_ADMIN" && dbUser.role !== "ADMIN")) {
+  if (!dbUser) redirect("/login");
+  if (dbUser.role !== "SUPER_ADMIN" && dbUser.role !== "ADMIN") {
     redirect("/dashboard");
   }
 

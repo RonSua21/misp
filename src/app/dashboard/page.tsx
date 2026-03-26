@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { getMispUser } from "@/lib/auth-cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -26,18 +26,11 @@ function StatCard({ label, value, icon: Icon, color }: {
 }
 
 export default async function DashboardPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  // getMispUser() is memoized — shares the single DB call made by layout.tsx.
+  const profile = await getMispUser();
+  if (!profile) redirect("/login");
 
   const db = createAdminClient();
-
-  // Fetch user profile
-  const { data: profile } = await db
-    .from("users")
-    .select("id, firstName, lastName, residencyVerified, barangay")
-    .eq("supabaseId", user.id)
-    .single();
 
   // Fetch recent applications
   const { data: applications } = profile

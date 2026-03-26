@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
-import { ShieldAlert, MapPin } from "lucide-react";
+import { ShieldAlert, MapPin, UserX, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import ApplyForm from "@/components/dashboard/ApplyForm";
 import type { Metadata } from "next";
@@ -17,7 +17,7 @@ export default async function ApplyPage() {
 
   const [{ data: profile }, { data: programs }] = await Promise.all([
     db.from("users")
-      .select("id, firstName, lastName, contactNumber, barangay, residencyVerified")
+      .select("id, firstName, lastName, contactNumber, barangay, residencyVerified, role")
       .eq("supabaseId", user.id)
       .single(),
     db.from("benefit_programs")
@@ -27,6 +27,43 @@ export default async function ApplyPage() {
   ]);
 
   if (!profile) redirect("/login");
+
+  // GUEST users cannot submit benefit applications
+  if (profile.role === "GUEST") {
+    return (
+      <div className="max-w-2xl mx-auto space-y-6">
+        <div>
+          <h1 className="text-2xl font-extrabold text-gray-900">Apply for Assistance</h1>
+        </div>
+        <div className="card p-8 text-center space-y-4">
+          <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto">
+            <UserX className="w-8 h-8 text-red-500" />
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">Restricted — Non-Makati Resident</h2>
+            <p className="text-gray-500 text-sm mt-2 max-w-sm mx-auto">
+              MSWD benefit programs are exclusively for <strong>Makati City residents</strong>.
+              Your GPS verification determined that you are outside Makati City.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+            <Link
+              href="/guest"
+              className="inline-flex items-center justify-center gap-2 bg-makati-blue text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:bg-blue-800 transition-colors"
+            >
+              <ExternalLink className="w-4 h-4" /> View Guest Services
+            </Link>
+            <Link
+              href="/dashboard/profile#residency"
+              className="inline-flex items-center justify-center gap-2 border border-gray-300 text-gray-700 text-sm font-semibold px-5 py-2.5 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <MapPin className="w-4 h-4" /> Re-verify Address
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">

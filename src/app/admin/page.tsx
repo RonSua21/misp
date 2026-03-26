@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { getMispUser } from "@/lib/auth-cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import Link from "next/link";
 import { Users, FileText, Clock, CheckCircle2, Banknote, XCircle, ArrowRight, MapPin } from "lucide-react";
@@ -9,32 +9,23 @@ import type { ApplicationStatus } from "@/types";
 const STATUS_LIST: ApplicationStatus[] = ["PENDING", "UNDER_REVIEW", "APPROVED", "REJECTED", "DISBURSED"];
 
 export default async function AdminOverviewPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-
-  const db = createAdminClient();
-
-  const { data: dbUser } = await db
-    .from("users")
-    .select("role, barangay")
-    .eq("supabaseId", user.id)
-    .single();
-
+  const dbUser = await getMispUser();
   if (!dbUser) redirect("/login");
 
+  const db = createAdminClient();
   const isSuperAdmin = dbUser.role === "SUPER_ADMIN";
   const coordinatorBarangay: string | null = isSuperAdmin ? null : (dbUser.barangay ?? null);
 
-  // Run all queries in parallel — scoped by barangay for coordinators
+  // Run all queries in parallel — scoped by barangay for coordinators.
+  // Use select("id") for count-only queries — avoid unnecessary column transfers.
   const [
     { count: totalUsers },
     { data: recentApplications },
     ...statusResults
   ] = await Promise.all([
     isSuperAdmin
-      ? db.from("users").select("*", { count: "exact", head: true }).eq("role", "REGISTERED_USER")
-      : db.from("users").select("*", { count: "exact", head: true }).eq("role", "REGISTERED_USER").eq("barangay", coordinatorBarangay!),
+      ? db.from("users").select("id", { count: "exact", head: true }).eq("role", "REGISTERED_USER")
+      : db.from("users").select("id", { count: "exact", head: true }).eq("role", "REGISTERED_USER").eq("barangay", coordinatorBarangay!),
 
     coordinatorBarangay
       ? db.from("applications")
@@ -49,8 +40,8 @@ export default async function AdminOverviewPage() {
 
     ...STATUS_LIST.map((s) =>
       coordinatorBarangay
-        ? db.from("applications").select("*", { count: "exact", head: true }).eq("status", s).eq("applicantBarangay", coordinatorBarangay)
-        : db.from("applications").select("*", { count: "exact", head: true }).eq("status", s)
+        ? db.from("applications").select("id", { count: "exact", head: true }).eq("status", s).eq("applicantBarangay", coordinatorBarangay)
+        : db.from("applications").select("id", { count: "exact", head: true }).eq("status", s)
     ),
   ]);
 
@@ -59,7 +50,7 @@ export default async function AdminOverviewPage() {
   );
   const totalApps = Object.values(countMap).reduce((a, b) => a + b, 0);
 
-  // Fetch program names
+  // Fetch program names for the recent list only (max 10 IDs).
   const programIds = [...new Set((recentApplications ?? []).map((a) => a.benefitProgramId))];
   const { data: programs } = programIds.length
     ? await db.from("benefit_programs").select("id, name").in("id", programIds)
