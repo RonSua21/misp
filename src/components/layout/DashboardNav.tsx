@@ -10,15 +10,17 @@ import {
   Menu,
   X,
   Bell,
+  ShieldAlert,
 } from "lucide-react";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 const navItems = [
-  { href: "/dashboard",            label: "Dashboard",     icon: LayoutDashboard },
-  { href: "/dashboard/apply",      label: "Apply",         icon: FilePlus },
-  { href: "/dashboard/applications", label: "My Applications", icon: FileText },
-  { href: "/dashboard/profile",    label: "Profile",       icon: User },
+  { href: "/dashboard",                    label: "Dashboard",       icon: LayoutDashboard },
+  { href: "/dashboard/apply",              label: "Apply",           icon: FilePlus },
+  { href: "/dashboard/applications",       label: "My Applications", icon: FileText },
+  { href: "/dashboard/profile",            label: "Profile",         icon: User },
+  { href: "/dashboard/evacuation/scan",    label: "Evacuation",      icon: ShieldAlert },
 ];
 
 export default function DashboardNav({ userEmail }: { userEmail: string }) {
@@ -50,13 +52,18 @@ export default function DashboardNav({ userEmail }: { userEmail: string }) {
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-1">
           {navItems.map(({ href, label, icon: Icon }) => {
-            const active = pathname === href;
+            const active = pathname === href || pathname.startsWith(href + "/");
+            const isEvacuation = href.includes("evacuation");
             return (
               <Link
                 key={href}
                 href={href}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors
-                  ${active
+                  ${isEvacuation
+                    ? active
+                      ? "bg-red-100 text-red-700"
+                      : "text-red-600 hover:bg-red-50"
+                    : active
                     ? "bg-makati-blue-light text-makati-blue"
                     : "text-gray-600 hover:bg-gray-100"
                   }`}
@@ -108,14 +115,18 @@ export default function DashboardNav({ userEmail }: { userEmail: string }) {
         <div className="md:hidden border-t border-gray-100 bg-white px-4 pb-4">
           <nav className="mt-2 space-y-1">
             {navItems.map(({ href, label, icon: Icon }) => {
-              const active = pathname === href;
+              const active = pathname === href || pathname.startsWith(href + "/");
+              const isEvacuation = href.includes("evacuation");
               return (
                 <Link
                   key={href}
                   href={href}
                   onClick={() => setOpen(false)}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                    ${active ? "bg-makati-blue-light text-makati-blue" : "text-gray-700 hover:bg-gray-100"}`}
+                    ${isEvacuation
+                      ? active ? "bg-red-100 text-red-700" : "text-red-600 hover:bg-red-50"
+                      : active ? "bg-makati-blue-light text-makati-blue" : "text-gray-700 hover:bg-gray-100"
+                    }`}
                 >
                   <Icon className="w-4 h-4" />
                   {label}
