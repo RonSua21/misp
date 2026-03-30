@@ -1,8 +1,6 @@
 import { Resend } from "resend";
 import type { ApplicationStatus } from "@/types";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const FROM = "MISP Makati <notifications@misp.makati.gov.ph>";
 
 // ── Status copy ───────────────────────────────────────────────────────────────
@@ -172,6 +170,7 @@ export async function sendStatusNotification({
     return;
   }
 
+  const resend = new Resend(process.env.RESEND_API_KEY);
   const cfg = STATUS_CONFIG[status];
 
   const { error } = await resend.emails.send({
