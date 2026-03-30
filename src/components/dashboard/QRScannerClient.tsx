@@ -235,7 +235,6 @@ export default function QRScannerClient() {
               onScan={handleScan}
               onError={() => setCameraError(true)}
               constraints={{ facingMode: "environment" }}
-              components={{ audio: false }}
               styles={{ container: { width: "100%", height: "100%" } }}
             />
             {/* Scanning frame overlay */}
