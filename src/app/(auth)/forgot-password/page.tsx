@@ -1,41 +1,19 @@
-import Link from "next/link";
-import { ShieldCheck, AlertTriangle, CheckCircle } from "lucide-react";
-import LoginForm from "@/components/auth/LoginForm";
+import { ShieldCheck } from "lucide-react";
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Login — MISP",
-};
+export const metadata: Metadata = { title: "Forgot Password — MISP" };
 
-const ERROR_MESSAGES: Record<string, string> = {
-  "use-admin-portal":
-    "Staff accounts cannot access the Resident Portal. Please use the Admin Portal instead.",
-};
-
-const SUCCESS_MESSAGES: Record<string, string> = {
-  "reset-success": "Password updated successfully. Please sign in with your new password.",
-};
-
-export default async function LoginPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ error?: string; reset?: string }>;
-}) {
-  const { error, reset } = await searchParams;
-  const errorMessage = error ? ERROR_MESSAGES[error] : null;
-  const successMessage = reset ? SUCCESS_MESSAGES[`${reset}-success`] : null;
-
+export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen bg-makati-gray flex">
       {/* Left panel — branding */}
       <div className="hidden lg:flex flex-col justify-between bg-makati-blue text-white w-[45%] p-12 relative overflow-hidden">
-        {/* Background decoration */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full -translate-y-1/3 translate-x-1/3" />
           <div className="absolute bottom-0 left-0 w-60 h-60 bg-white/5 rounded-full translate-y-1/3 -translate-x-1/3" />
         </div>
 
-        {/* Logo */}
         <div className="relative flex items-center gap-3">
           <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
             <span className="font-extrabold text-lg">M</span>
@@ -46,15 +24,14 @@ export default async function LoginPage({
           </div>
         </div>
 
-        {/* Body */}
         <div className="relative">
           <h2 className="text-4xl font-extrabold leading-tight mb-5">
-            Access Your<br />
-            <span className="text-makati-gold">Benefit Programs</span>
+            Reset Your<br />
+            <span className="text-makati-gold">Password</span>
           </h2>
           <p className="text-blue-200 text-base leading-relaxed mb-8">
-            Manage your applications for financial, medical, senior citizen, and
-            PWD assistance — all in one secure place.
+            Enter the email address linked to your account and we&apos;ll send
+            you a secure link to reset your password.
           </p>
           <div className="flex items-center gap-3 bg-white/10 rounded-xl p-4 border border-white/20">
             <ShieldCheck className="w-6 h-6 text-makati-gold shrink-0" />
@@ -84,26 +61,11 @@ export default async function LoginPage({
           </div>
 
           <div className="card p-8">
-            <h1 className="text-2xl font-extrabold text-gray-900 mb-1">Welcome back</h1>
+            <h1 className="text-2xl font-extrabold text-gray-900 mb-1">Forgot your password?</h1>
             <p className="text-gray-500 text-sm mb-7">
-              Sign in to your MISP account to manage your applications.
+              Enter your email and we&apos;ll send you a link to reset it.
             </p>
-
-            {successMessage && (
-              <div className="flex items-start gap-2.5 p-3.5 mb-5 bg-green-50 border border-green-200 rounded-lg text-sm text-green-800">
-                <CheckCircle className="w-4 h-4 shrink-0 mt-0.5 text-green-500" />
-                {successMessage}
-              </div>
-            )}
-
-            {errorMessage && (
-              <div className="flex items-start gap-2.5 p-3.5 mb-5 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
-                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" />
-                {errorMessage}
-              </div>
-            )}
-
-            <LoginForm />
+            <ForgotPasswordForm />
           </div>
 
           <p className="mt-6 text-center text-xs text-gray-400">
