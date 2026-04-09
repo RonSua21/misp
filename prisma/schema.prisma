@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // ─────────────────────────────────────────────
@@ -90,6 +91,7 @@ model User {
   applications       Application[]
   documents          Document[]
   residencyChecks    ResidencyVerification[]
+  notifications      Notification[]
 
   @@index([role])
   @@index([barangay])
@@ -239,6 +241,33 @@ model ResidencyVerification {
 
   @@index([userId])
   @@map("residency_verifications")
+}
+
+// ─────────────────────────────────────────────
+//  NOTIFICATIONS
+// ─────────────────────────────────────────────
+
+enum NotificationType {
+  APPLICATION_UPDATE
+  ANNOUNCEMENT
+  DISASTER_ALERT
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String?
+  title     String
+  message   String
+  type      NotificationType @default(ANNOUNCEMENT)
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  user      User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@map("notifications")
 }
 
 // ─────────────────────────────────────────────

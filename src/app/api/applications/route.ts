@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient, generateRefNumber } from "@/lib/supabase/admin";
+import { notifyAdmins } from "@/lib/notifications";
 
 export async function POST(request: Request) {
   try {
@@ -78,6 +79,13 @@ export async function POST(request: Request) {
       const { error: docError } = await db.from("documents").insert(docRows);
       if (docError) console.error("[POST /api/applications] doc insert:", docError);
     }
+
+    // Notify all admin/super-admin staff about the new application (non-blocking)
+    notifyAdmins({
+      title: "New Application Submitted",
+      message: `${applicantName} submitted application ${application.referenceNumber} — awaiting review.`,
+      type: "APPLICATION_UPDATE",
+    }).catch((e) => console.error("[notifyAdmins]", e));
 
     return NextResponse.json(
       { id: application.id, referenceNumber: application.referenceNumber },

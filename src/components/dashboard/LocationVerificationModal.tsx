@@ -4,20 +4,18 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FilePlus, MapPin, X } from "lucide-react";
 
-// TODO: Replace with real check from user profile once backend is wired up.
-const isVerifiedMakatiCitizen = false;
-
 interface Props {
   label: string;
   variant?: "primary" | "empty-state";
+  isVerified: boolean;
 }
 
-export default function NewApplicationButton({ label, variant = "primary" }: Props) {
+export default function NewApplicationButton({ label, variant = "primary", isVerified }: Props) {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
 
   function handleClick() {
-    if (isVerifiedMakatiCitizen) {
+    if (isVerified) {
       router.push("/dashboard/apply");
     } else {
       setShowModal(true);

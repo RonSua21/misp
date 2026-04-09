@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isWithinMakati, MAKATI_BARANGAYS } from "@/lib/makati-bounds";
@@ -67,6 +68,7 @@ export async function POST(request: Request) {
       updatedAt:        now,
     }).eq("id", userId);
 
+    revalidatePath("/dashboard/applications");
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[POST /api/residency-verify]", err);

@@ -57,14 +57,14 @@ export default async function ApplicationsPage({
             {count ?? 0} total application{(count ?? 0) !== 1 ? "s" : ""}
           </p>
         </div>
-        <NewApplicationButton label="New Application" variant="primary" />
+        <NewApplicationButton label="New Application" variant="primary" isVerified={profile.residencyVerified} />
       </div>
 
       {(count ?? 0) === 0 ? (
         <div className="card p-12 text-center">
           <FileText className="w-10 h-10 text-gray-300 mx-auto mb-3" />
           <p className="text-gray-500">You have no applications yet.</p>
-          <NewApplicationButton label="Apply Now" variant="empty-state" />
+          <NewApplicationButton label="Apply Now" variant="empty-state" isVerified={profile.residencyVerified} />
         </div>
       ) : (
         <div className="card overflow-hidden">

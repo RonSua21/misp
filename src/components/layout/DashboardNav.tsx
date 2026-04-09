@@ -9,11 +9,11 @@ import {
   LogOut,
   Menu,
   X,
-  Bell,
   ShieldAlert,
 } from "lucide-react";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import NotificationBell from "@/components/layout/NotificationBell";
 
 const navItems = [
   { href: "/dashboard",                    label: "Dashboard",       icon: LayoutDashboard },
@@ -77,10 +77,7 @@ export default function DashboardNav({ userEmail }: { userEmail: string }) {
 
         {/* Right actions */}
         <div className="flex items-center gap-2">
-          <button className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Notifications">
-            <Bell className="w-5 h-5 text-gray-600" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500" />
-          </button>
+          <NotificationBell />
 
           <div className="hidden md:flex items-center gap-2 pl-2 border-l border-gray-200">
             <div className="w-8 h-8 rounded-full bg-makati-blue-light flex items-center justify-center">
