@@ -29,6 +29,34 @@ export type DocumentType =
 
 export type DocumentStatus = "PENDING" | "VERIFIED" | "REJECTED";
 
+// ─── MSWD Workflow Enums ───────────────────────────────────────────────────
+
+export type VoterStatus = "ACTIVE" | "INACTIVE" | "UNKNOWN";
+
+/** 0=pending MAC, 1=MAC done/pending MSWD, 2=MSWD done/pending Mayor, 3=fully approved */
+export type ApprovalLevel = 0 | 1 | 2 | 3;
+
+export type RejectionCode =
+  | "VOTER_INACTIVE"
+  | "INCOMPLETE_DOCS"
+  | "NOT_ELIGIBLE"
+  | "ORIENTATION_REQUIRED"
+  | "FAILED_HOME_VISIT"
+  | "OTHER";
+
+export type TenurialStatus = "OWNER" | "RENTER" | "SHARER" | "BEDSPACER";
+
+export type DisburseMethod = "CASH" | "MAKATIZEN_CARD" | "GCASH";
+
+export type PayrollBatchStatus =
+  | "DRAFT"
+  | "PENDING_MAC"
+  | "PENDING_MSWD"
+  | "PENDING_MAYOR"
+  | "APPROVED"
+  | "DISBURSED"
+  | "REJECTED";
+
 // ─── Auth / Session ────────────────────────────────────────────────────────
 
 export interface UserProfile {
@@ -57,9 +85,21 @@ export interface Application {
   applicantContact?: string;
   applicantBarangay?: string;
   purpose: string;
-  amountRequested?: number;
   amountApproved?: number;
   remarks?: string;
+  // MSWD multi-level approval fields
+  voterStatus?: VoterStatus;
+  approvalLevel?: ApprovalLevel;
+  rejectionCode?: RejectionCode;
+  orientationAttended?: boolean;
+  homeVisitRequired?: boolean;
+  homeVisitDate?: string;
+  homeVisitNotes?: string;
+  macApprovedAt?: string;
+  mswdApprovedAt?: string;
+  mayorApprovedAt?: string;
+  disbursementMethod?: DisburseMethod;
+  prpwdEncoded?: boolean;
   createdAt: string;
   updatedAt: string;
   benefitProgram?: BenefitProgram;
@@ -170,6 +210,16 @@ export interface Evacuee {
   barangay?: string;
   headCount: number;
   registeredAt: string;
+  // DAFAC fields
+  dafacNumber?: string;
+  tenurialStatus?: TenurialStatus;
+  assistanceAmount?: number;
+  isSenior?: boolean;
+  isPwd?: boolean;
+  isPregnant?: boolean;
+  disbursed?: boolean;
+  disbursedAt?: string;
+  disbursementMethod?: DisburseMethod;
 }
 
 export interface ReliefInventory {
@@ -183,4 +233,81 @@ export interface ReliefInventory {
   notes?: string;
   createdAt: string;
   updatedAt: string;
+}
+
+// ─── DAFAC Config ─────────────────────────────────────────────────────────
+
+export interface DafacConfig {
+  id: string;
+  tenurialStatus: TenurialStatus;
+  amount: number;
+  updatedAt: string;
+}
+
+// ─── Payroll ──────────────────────────────────────────────────────────────
+
+export interface PayrollBatch {
+  id: string;
+  incidentId: string;
+  batchNumber: string;
+  status: PayrollBatchStatus;
+  totalAmount: number;
+  rejectionReason?: string;
+  macApprovedAt?: string;
+  mswdApprovedAt?: string;
+  mayorApprovedAt?: string;
+  disbursedAt?: string;
+  createdAt: string;
+  items?: PayrollItem[];
+}
+
+export interface PayrollItem {
+  id: string;
+  batchId: string;
+  evacueeId: string;
+  amount: number;
+  disburseMethod: DisburseMethod;
+  disbursedAt?: string;
+  evacuee?: Evacuee;
+}
+
+// ─── Relief Voucher ───────────────────────────────────────────────────────
+
+export interface ReliefVoucher {
+  id: string;
+  voucherCode: string;
+  evacueeId: string;
+  inventoryId: string;
+  quantity: number;
+  redeemed: boolean;
+  redeemedAt?: string;
+  issuedAt: string;
+  evacuee?: Evacuee;
+  inventory?: ReliefInventory;
+}
+
+// ─── Audit Photo ──────────────────────────────────────────────────────────
+
+export interface AuditPhoto {
+  id: string;
+  entityType: "APPLICATION" | "DISBURSEMENT" | "DISTRIBUTION";
+  entityId: string;
+  fileUrl: string;
+  latitude?: number;
+  longitude?: number;
+  takenAt: string;
+}
+
+// ─── ID Issuance ──────────────────────────────────────────────────────────
+
+export interface IdIssuance {
+  id: string;
+  applicationId: string;
+  userId: string;
+  bookletType: "MEDICINE" | "GROCERY" | "MOVIE";
+  bookletNumber?: string;
+  claimDate?: string;
+  signatureUrl?: string;
+  issuedBy: string;
+  createdAt: string;
 }

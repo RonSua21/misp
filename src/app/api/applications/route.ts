@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const body = await request.json();
-    const { userId, benefitProgramId, applicantName, applicantContact, applicantBarangay, purpose, amountRequested, documents = [] } = body;
+    const { userId, benefitProgramId, applicantName, applicantContact, applicantBarangay, purpose, documents = [] } = body;
 
     if (!userId || !benefitProgramId || !purpose?.trim()) {
       return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
@@ -47,7 +47,6 @@ export async function POST(request: Request) {
         applicantBarangay: applicantBarangay ?? null,
         applicantAddress: applicantBarangay ? `${applicantBarangay}, Makati City` : null,
         purpose: purpose.trim(),
-        amountRequested: amountRequested ?? null,
         status: "PENDING",
         createdAt: now,
         updatedAt: now,

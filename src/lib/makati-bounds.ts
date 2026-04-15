@@ -28,10 +28,13 @@ export function isWithinMakati(lat: number, lng: number): boolean {
   );
 }
 
+// District 1 (20 barangays) + District 2 (3 barangays) = 23 total
 export const MAKATI_BARANGAYS = [
+  // District 1
   "Bangkal", "Bel-Air", "Carmona", "Dasmariñas", "Forbes Park",
-  "Guadalupe Nuevo", "Guadalupe Viejo", "Kasilawan", "La Paz",
-  "Magallanes", "Olympia", "Palanan", "Pinagkaisahan", "Pio del Pilar",
-  "Poblacion", "San Antonio", "San Isidro", "San Lorenzo", "Santa Cruz",
-  "Singkamas", "Tejeros", "Urdaneta", "Valenzuela",
+  "Kasilawan", "La Paz", "Magallanes", "Olympia", "Palanan",
+  "Pio del Pilar", "Poblacion", "San Antonio", "San Isidro", "San Lorenzo",
+  "Santa Cruz", "Singkamas", "Tejeros", "Urdaneta", "Valenzuela",
+  // District 2
+  "Guadalupe Nuevo", "Guadalupe Viejo", "Pinagkaisahan",
 ];

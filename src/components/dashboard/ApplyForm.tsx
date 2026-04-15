@@ -42,7 +42,6 @@ export default function ApplyForm({
   const router = useRouter();
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [purpose, setPurpose] = useState("");
-  const [amountRequested, setAmountRequested] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -111,7 +110,6 @@ export default function ApplyForm({
           applicantContact,
           applicantBarangay,
           purpose: purpose.trim(),
-          amountRequested: amountRequested ? parseFloat(amountRequested) : undefined,
           documents: uploadedUrls,
         }),
       });
@@ -189,7 +187,7 @@ export default function ApplyForm({
           </ul>
           {selectedProgram.maxAmount && (
             <p className="mt-3 text-xs text-gray-500">
-              Maximum assistance: <strong className="text-makati-blue">₱{selectedProgram.maxAmount.toLocaleString()}</strong>
+              Standard benefit package: <strong className="text-makati-blue">₱{selectedProgram.maxAmount.toLocaleString()}</strong> — assigned by MSWD upon approval.
             </p>
           )}
         </div>
@@ -209,21 +207,6 @@ export default function ApplyForm({
           required
         />
       </div>
-
-      {/* Amount */}
-      {selectedProgram?.maxAmount && (
-        <Input
-          label="Amount Requested (₱)"
-          type="number"
-          min="1"
-          max={selectedProgram.maxAmount}
-          step="0.01"
-          placeholder={`Max ₱${selectedProgram.maxAmount.toLocaleString()}`}
-          value={amountRequested}
-          onChange={(e) => setAmountRequested(e.target.value)}
-          hint={`Must not exceed ₱${selectedProgram.maxAmount.toLocaleString()}`}
-        />
-      )}
 
       {/* Document upload */}
       <div>

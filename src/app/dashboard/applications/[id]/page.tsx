@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   ArrowLeft, FileText, Calendar, Hash,
   Banknote, MessageSquare, Clock, CheckCircle2,
-  XCircle, AlertCircle,
+  XCircle, AlertCircle, ShieldCheck, Building2,
 } from "lucide-react";
 import StatusBadge from "@/components/ui/StatusBadge";
 import type { ApplicationStatus, BenefitCategory } from "@/types";
@@ -20,20 +20,31 @@ const CATEGORY_LABELS: Record<BenefitCategory, string> = {
   PWD_ASSISTANCE:       "PWD Assistance",
 };
 
-const STATUS_STEPS: { status: ApplicationStatus; label: string; icon: React.ElementType }[] = [
-  { status: "PENDING",      label: "Submitted",    icon: FileText },
-  { status: "UNDER_REVIEW", label: "Under Review", icon: Clock },
-  { status: "APPROVED",     label: "Approved",     icon: CheckCircle2 },
-  { status: "DISBURSED",    label: "Disbursed",    icon: Banknote },
+const REJECTION_MESSAGES: Record<string, string> = {
+  VOTER_INACTIVE:       "Your voter registration is inactive. Please update at the COMELEC office.",
+  INCOMPLETE_DOCS:      "One or more required documents are missing or invalid.",
+  NOT_ELIGIBLE:         "You do not meet the eligibility requirements for this program.",
+  ORIENTATION_REQUIRED: "You must attend an orientation seminar before your application can proceed.",
+  FAILED_HOME_VISIT:    "The home visitation assessment could not be completed successfully.",
+  OTHER:                "Your application was not approved. Please contact the MSWD office for details.",
+};
+
+// 5-step approval tracker: Submitted → MAC → MSWD Head → Mayor's Office → Released
+const APPROVAL_STEPS = [
+  { label: "Submitted",       icon: FileText       },
+  { label: "MAC Review",      icon: Clock          },
+  { label: "MSWD Head",       icon: ShieldCheck    },
+  { label: "Mayor's Office",  icon: Building2      },
+  { label: "Approved",        icon: CheckCircle2   },
 ];
 
-const STEP_ORDER: Record<ApplicationStatus, number> = {
-  PENDING:      0,
-  UNDER_REVIEW: 1,
-  APPROVED:     2,
-  DISBURSED:    3,
-  REJECTED:     -1,
-};
+// Maps approval_level (0–3) + status to active step index (0–4)
+function getActiveStep(approvalLevel: number, status: ApplicationStatus): number {
+  if (status === "APPROVED" || status === "DISBURSED") return 4;
+  if (status === "REJECTED") return approvalLevel + 1;
+  // PENDING or UNDER_REVIEW: active step = approval_level + 1
+  return approvalLevel + 1;
+}
 
 export default async function ApplicationDetailPage({
   params,
@@ -47,19 +58,17 @@ export default async function ApplicationDetailPage({
 
   const db = createAdminClient();
 
-  // Fetch only the columns used by the UI — ownership enforced via userId filter.
   const { data: app } = await db
     .from("applications")
     .select(
-      "id, referenceNumber, status, purpose, amountRequested, amountApproved, remarks, benefitProgramId, createdAt, updatedAt"
+      "id, referenceNumber, status, purpose, amountApproved, remarks, benefitProgramId, createdAt, updatedAt, approval_level, voter_status, rejection_code"
     )
     .eq("id", id)
-    .eq("userId", profile.id)   // ← ensures ownership
+    .eq("userId", profile.id)
     .single();
 
   if (!app) notFound();
 
-  // Fetch related data in parallel
   const [
     { data: program },
     { data: documents },
@@ -74,13 +83,20 @@ export default async function ApplicationDetailPage({
       .eq("applicationId", id)
       .order("createdAt", { ascending: true }),
     db.from("application_status_history")
-      .select("id, status, notes, createdAt")
+      .select("id, fromStatus, toStatus, remarks, changedAt, approvalLevel, rejectionCode")
       .eq("applicationId", id)
-      .order("createdAt", { ascending: false }),
+      .order("changedAt", { ascending: false }),
   ]);
 
-  const currentStep = STEP_ORDER[app.status as ApplicationStatus] ?? -1;
-  const isRejected = app.status === "REJECTED";
+  const isRejected   = app.status === "REJECTED";
+  const approvalLevel = (app.approval_level as number) ?? 0;
+  const activeStep    = getActiveStep(approvalLevel, app.status as ApplicationStatus);
+
+  // Rejection message (use rejection_code from app or latest history entry)
+  const rejCode = (app.rejection_code as string | null) ?? null;
+  const rejectionMessage = rejCode
+    ? (REJECTION_MESSAGES[rejCode] ?? REJECTION_MESSAGES.OTHER)
+    : (app.remarks ?? "Your application was not approved. Please contact the MSWD office.");
 
   return (
     <div className="space-y-6 max-w-4xl">
@@ -109,15 +125,14 @@ export default async function ApplicationDetailPage({
       {!isRejected ? (
         <div className="card p-6">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-5">
-            Application Progress
+            Approval Progress
           </p>
           <div className="flex items-center gap-0">
-            {STATUS_STEPS.map((step, i) => {
-              const done    = currentStep > i;
-              const active  = currentStep === i;
-              const pending = currentStep < i;
+            {APPROVAL_STEPS.map((step, i) => {
+              const done    = activeStep > i;
+              const active  = activeStep === i;
               return (
-                <div key={step.status} className="flex items-center flex-1 last:flex-none">
+                <div key={step.label} className="flex items-center flex-1 last:flex-none">
                   <div className="flex flex-col items-center gap-1.5 flex-shrink-0">
                     <div className={`w-9 h-9 rounded-full flex items-center justify-center border-2 transition-colors
                       ${done   ? "bg-makati-blue border-makati-blue text-white"
@@ -126,29 +141,33 @@ export default async function ApplicationDetailPage({
                     >
                       <step.icon className="w-4 h-4" />
                     </div>
-                    <span className={`text-[10px] font-semibold text-center leading-tight
+                    <span className={`text-[10px] font-semibold text-center leading-tight w-16
                       ${done || active ? "text-makati-blue" : "text-gray-400"}`}
                     >
                       {step.label}
                     </span>
                   </div>
-                  {i < STATUS_STEPS.length - 1 && (
+                  {i < APPROVAL_STEPS.length - 1 && (
                     <div className={`flex-1 h-0.5 mx-1 mb-5 ${done ? "bg-makati-blue" : "bg-gray-200"}`} />
                   )}
                 </div>
               );
             })}
           </div>
+          {app.status === "DISBURSED" && (
+            <p className="mt-4 text-sm text-purple-700 bg-purple-50 rounded-lg px-3 py-2">
+              <Banknote className="w-4 h-4 inline mr-1" />
+              Your benefit has been disbursed. Please visit the MSWD office if you have not yet claimed it.
+            </p>
+          )}
         </div>
       ) : (
         <div className="card p-5 border-l-4 border-red-500 bg-red-50">
           <div className="flex items-start gap-3">
             <XCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
             <div>
-              <p className="font-bold text-red-800">Application Rejected</p>
-              <p className="text-sm text-red-700 mt-0.5">
-                {app.remarks ?? "Your application was not approved. Contact MSWD for more information."}
-              </p>
+              <p className="font-bold text-red-800">Application Not Approved</p>
+              <p className="text-sm text-red-700 mt-0.5">{rejectionMessage}</p>
             </div>
           </div>
         </div>
@@ -189,17 +208,9 @@ export default async function ApplicationDetailPage({
                 })}
               </span>
             </div>
-            {app.amountRequested && (
-              <div className="flex justify-between gap-2">
-                <span className="text-gray-400">Amount Requested</span>
-                <span className="font-semibold text-gray-900">
-                  ₱ {Number(app.amountRequested).toLocaleString("en-PH")}
-                </span>
-              </div>
-            )}
             {app.amountApproved && (
               <div className="flex justify-between gap-2">
-                <span className="text-gray-400">Amount Approved</span>
+                <span className="text-gray-400">Benefit Awarded</span>
                 <span className="font-bold text-green-700">
                   ₱ {Number(app.amountApproved).toLocaleString("en-PH")}
                 </span>
@@ -298,13 +309,24 @@ export default async function ApplicationDetailPage({
                 </div>
                 <div className="pb-4">
                   <p className="text-sm font-semibold text-gray-900">
-                    {(entry.status as string).replace("_", " ")}
+                    {entry.fromStatus
+                      ? `${(entry.fromStatus as string).replace(/_/g, " ")} → ${(entry.toStatus as string).replace(/_/g, " ")}`
+                      : (entry.toStatus as string).replace(/_/g, " ")
+                    }
+                    {entry.approvalLevel != null && (
+                      <span className="ml-2 text-xs text-gray-400 font-normal">(Level {entry.approvalLevel})</span>
+                    )}
                   </p>
-                  {entry.notes && (
-                    <p className="text-xs text-gray-500 mt-0.5">{entry.notes}</p>
+                  {entry.rejectionCode && (
+                    <p className="text-xs text-red-600 mt-0.5">
+                      {REJECTION_MESSAGES[entry.rejectionCode as string] ?? (entry.rejectionCode as string).replace(/_/g, " ")}
+                    </p>
+                  )}
+                  {entry.remarks && (
+                    <p className="text-xs text-gray-500 mt-0.5">&quot;{entry.remarks}&quot;</p>
                   )}
                   <p className="text-[11px] text-gray-400 mt-1">
-                    {new Date(entry.createdAt).toLocaleDateString("en-PH", {
+                    {new Date(entry.changedAt).toLocaleDateString("en-PH", {
                       month: "long", day: "numeric", year: "numeric",
                     })}
                   </p>

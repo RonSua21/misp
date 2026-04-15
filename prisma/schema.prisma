@@ -15,6 +15,50 @@ datasource db {
 //  ENUMS
 // ─────────────────────────────────────────────
 
+enum VoterStatus {
+  ACTIVE
+  INACTIVE
+  UNKNOWN
+}
+
+enum RejectionCode {
+  VOTER_INACTIVE
+  INCOMPLETE_DOCS
+  NOT_ELIGIBLE
+  ORIENTATION_REQUIRED
+  FAILED_HOME_VISIT
+  OTHER
+}
+
+enum TenurialStatus {
+  OWNER
+  RENTER
+  SHARER
+  BEDSPACER
+}
+
+enum DisburseMethod {
+  CASH
+  MAKATIZEN_CARD
+  GCASH
+}
+
+enum PayrollBatchStatus {
+  DRAFT
+  PENDING_MAC
+  PENDING_MSWD
+  PENDING_MAYOR
+  APPROVED
+  DISBURSED
+  REJECTED
+}
+
+enum BookletType {
+  MEDICINE
+  GROCERY
+  MOVIE
+}
+
 enum Role {
   SUPER_ADMIN
   ADMIN
@@ -150,6 +194,23 @@ model Application {
   approvedAt         DateTime?
   disbursedAt        DateTime?
 
+  // Multi-level approval (Phase 1 additions)
+  voterStatus        VoterStatus      @default(UNKNOWN)
+  approvalLevel      Int              @default(0)   // 0=MAC, 1=MSWD, 2=Mayor, 3=done
+  rejectionCode      RejectionCode?
+  orientationAttended Boolean         @default(false)
+  homeVisitRequired  Boolean          @default(false)
+  homeVisitDate      DateTime?
+  homeVisitNotes     String?
+  macApprovedAt      DateTime?
+  macApprovedBy      String?
+  mswdApprovedAt     DateTime?
+  mswdApprovedBy     String?
+  mayorApprovedAt    DateTime?
+  mayorApprovedBy    String?
+  disbursementMethod DisburseMethod?
+  prpwdEncoded       Boolean          @default(false)
+
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
 
@@ -158,6 +219,7 @@ model Application {
   benefitProgram     BenefitProgram   @relation(fields: [benefitProgramId], references: [id])
   documents          Document[]
   statusHistory      ApplicationStatusHistory[]
+  idIssuances        IdIssuance[]
 
   @@index([userId])
   @@index([status])
@@ -180,6 +242,8 @@ model ApplicationStatusHistory {
   changedBy     String            // Admin user ID
   remarks       String?
   changedAt     DateTime          @default(now())
+  approvalLevel Int?
+  rejectionCode RejectionCode?
 
   application   Application       @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
@@ -323,6 +387,7 @@ model DisasterIncident {
 
   evacuationCenters EvacuationCenter[]
   reliefInventory   ReliefInventory[]
+  payrollBatches    PayrollBatch[]
 
   @@index([status])
   @@map("disaster_incidents")
@@ -362,7 +427,20 @@ model Evacuee {
   headCount            Int              @default(1) // total family members
   registeredAt         DateTime         @default(now())
 
+  // DAFAC fields (Phase 1 additions)
+  dafacNumber          String?          @unique
+  tenurialStatus       TenurialStatus?
+  assistanceAmount     Float?
+  isSenior             Boolean          @default(false)
+  isPwd                Boolean          @default(false)
+  isPregnant           Boolean          @default(false)
+  disbursed            Boolean          @default(false)
+  disbursedAt          DateTime?
+  disbursementMethod   DisburseMethod?
+
   evacuationCenter     EvacuationCenter @relation(fields: [evacuationCenterId], references: [id], onDelete: Cascade)
+  payrollItems         PayrollItem[]
+  reliefVouchers       ReliefVoucher[]
 
   @@index([evacuationCenterId])
   @@map("evacuees")
@@ -382,7 +460,132 @@ model ReliefInventory {
   updatedAt            DateTime          @updatedAt
 
   incident             DisasterIncident? @relation(fields: [disasterIncidentId], references: [id], onDelete: SetNull)
+  reliefVouchers       ReliefVoucher[]
 
   @@index([disasterIncidentId])
   @@map("relief_inventory")
+}
+
+// ─────────────────────────────────────────────
+//  DAFAC CONFIG
+// ─────────────────────────────────────────────
+
+model DafacConfig {
+  id             String         @id @default(uuid())
+  tenurialStatus TenurialStatus @unique
+  amount         Float
+  updatedAt      DateTime       @updatedAt
+  updatedBy      String?
+
+  @@map("dafac_config")
+}
+
+// ─────────────────────────────────────────────
+//  PAYROLL BATCHES & ITEMS
+// ─────────────────────────────────────────────
+
+model PayrollBatch {
+  id               String             @id @default(uuid())
+  incidentId       String?
+  batchNumber      String             @unique
+  status           PayrollBatchStatus @default(DRAFT)
+  totalAmount      Float              @default(0)
+  rejectionReason  String?
+  macApprovedAt    DateTime?
+  macApprovedBy    String?
+  mswdApprovedAt   DateTime?
+  mswdApprovedBy   String?
+  mayorApprovedAt  DateTime?
+  mayorApprovedBy  String?
+  disbursedAt      DateTime?
+  createdBy        String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  incident         DisasterIncident?  @relation(fields: [incidentId], references: [id], onDelete: SetNull)
+  items            PayrollItem[]
+
+  @@index([incidentId])
+  @@map("payroll_batches")
+}
+
+model PayrollItem {
+  id             String        @id @default(uuid())
+  batchId        String
+  evacueeId      String
+  amount         Float
+  disburseMethod DisburseMethod @default(CASH)
+  disbursedAt    DateTime?
+  createdAt      DateTime      @default(now())
+
+  batch          PayrollBatch  @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  evacuee        Evacuee       @relation(fields: [evacueeId], references: [id], onDelete: Cascade)
+
+  @@unique([batchId, evacueeId])
+  @@index([batchId])
+  @@index([evacueeId])
+  @@map("payroll_items")
+}
+
+// ─────────────────────────────────────────────
+//  RELIEF VOUCHERS
+// ─────────────────────────────────────────────
+
+model ReliefVoucher {
+  id           String         @id @default(uuid())
+  voucherCode  String         @unique
+  evacueeId    String
+  inventoryId  String
+  quantity     Int            @default(1)
+  redeemed     Boolean        @default(false)
+  redeemedAt   DateTime?
+  redeemedBy   String?
+  issuedAt     DateTime       @default(now())
+  issuedBy     String
+
+  evacuee      Evacuee        @relation(fields: [evacueeId], references: [id], onDelete: Cascade)
+  inventory    ReliefInventory @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+
+  @@index([evacueeId])
+  @@index([voucherCode])
+  @@map("relief_vouchers")
+}
+
+// ─────────────────────────────────────────────
+//  AUDIT PHOTOS
+// ─────────────────────────────────────────────
+
+model AuditPhoto {
+  id          String   @id @default(uuid())
+  entityType  String   // "APPLICATION" | "DISBURSEMENT" | "DISTRIBUTION"
+  entityId    String
+  fileUrl     String
+  latitude    Float?
+  longitude   Float?
+  takenAt     DateTime @default(now())
+  uploadedBy  String
+
+  @@index([entityType, entityId])
+  @@map("audit_photos")
+}
+
+// ─────────────────────────────────────────────
+//  ID / BOOKLET ISSUANCES
+// ─────────────────────────────────────────────
+
+model IdIssuance {
+  id            String      @id @default(uuid())
+  applicationId String
+  userId        String
+  bookletType   BookletType
+  bookletNumber String?
+  claimDate     DateTime?
+  signatureUrl  String?
+  issuedBy      String
+  createdAt     DateTime    @default(now())
+
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId])
+  @@map("id_issuances")
 }
