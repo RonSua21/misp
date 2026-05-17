@@ -31,10 +31,24 @@ function timeAgo(iso: string) {
 
 export default function NotificationBell() {
   const [open, setOpen]               = useState(false);
+  const [closing, setClosing]         = useState(false);
   const [notifications, setNotifs]    = useState<Notification[]>([]);
   const [unreadCount, setUnread]      = useState(0);
   const [loading, setLoading]         = useState(false);
   const panelRef                      = useRef<HTMLDivElement>(null);
+
+  function closePanel() {
+    setClosing(true);
+    setTimeout(() => {
+      setOpen(false);
+      setClosing(false);
+    }, 150);
+  }
+
+  function togglePanel() {
+    if (open) closePanel();
+    else setOpen(true);
+  }
 
   const fetchNotifications = useCallback(async () => {
     try {
@@ -59,7 +73,7 @@ export default function NotificationBell() {
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
-        setOpen(false);
+        closePanel();
       }
     }
     if (open) document.addEventListener("mousedown", handleClickOutside);
@@ -92,11 +106,11 @@ export default function NotificationBell() {
     <div className="relative" ref={panelRef}>
       {/* Bell trigger */}
       <button
-        onClick={() => setOpen((o) => !o)}
-        className="relative p-2 rounded-lg hover:bg-white/10 transition-colors"
+        onClick={togglePanel}
+        className="relative p-2 rounded-lg hover:bg-white/15 active:scale-90 active:bg-white/20 transition-all duration-150"
         aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} unread)` : ""}`}
       >
-        <Bell className="w-5 h-5 text-white/60" />
+        <Bell className={`w-5 h-5 transition-colors duration-150 ${open ? "text-white" : "text-white/60"}`} />
         {unreadCount > 0 && (
           <span className="absolute top-1 right-1 min-w-[16px] h-4 flex items-center justify-center text-[10px] font-bold text-white bg-red-500 rounded-full px-0.5">
             {unreadCount > 9 ? "9+" : unreadCount}
@@ -105,8 +119,8 @@ export default function NotificationBell() {
       </button>
 
       {/* Dropdown panel */}
-      {open && (
-        <div className="absolute right-0 top-full mt-2 w-80 bg-makati-blue/80 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/15 z-50 overflow-hidden">
+      {(open || closing) && (
+        <div className={`${closing ? "dropdown-exit" : "dropdown-enter"} absolute right-0 top-full mt-2 w-80 bg-makati-blue/80 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/15 z-50 overflow-hidden`}>
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
             <h3 className="font-bold text-white text-sm">Notifications</h3>
@@ -121,7 +135,7 @@ export default function NotificationBell() {
                   Mark all read
                 </button>
               )}
-              <button onClick={() => setOpen(false)} className="text-white/40 hover:text-white/70">
+              <button onClick={closePanel} className="text-white/40 hover:text-white/70 active:scale-90 transition-all duration-150">
                 <X className="w-4 h-4" />
               </button>
             </div>

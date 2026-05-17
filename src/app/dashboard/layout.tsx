@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getMispUser } from "@/lib/auth-cache";
 import DashboardNav from "@/components/layout/DashboardNav";
+import PageTransition from "@/components/layout/PageTransition";
 
 export default async function DashboardLayout({
   children,
@@ -16,7 +17,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div className="min-h-screen overflow-x-clip">
       {/* Fixed glass background — same vibe as the landing page */}
       <div className="fixed inset-0 -z-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -28,9 +29,7 @@ export default async function DashboardLayout({
       <DashboardNav userEmail={dbUser.email} />
       {/* md:ml-16 = sidebar width; pt-20 = mobile top bar; md:pt-[72px] = desktop top bar */}
       <main className="md:ml-16 pt-20 md:pt-[72px] pb-8">
-        <div className="max-w-5xl mx-auto px-6">
-          {children}
-        </div>
+        <PageTransition>{children}</PageTransition>
       </main>
     </div>
   );
