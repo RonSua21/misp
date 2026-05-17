@@ -1,4 +1,4 @@
-import { getMispUser } from "@/lib/auth-cache";
+﻿import { getMispUser } from "@/lib/auth-cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -79,12 +79,12 @@ export default async function DashboardPage() {
             <p className="font-bold text-sm text-white">Request a Certificate</p>
             <p className="text-xs text-white/60">Indigency, Residency, Solo Parent & more</p>
           </div>
-          <ChevronRight className="w-4 h-4 ml-auto shrink-0 text-gray-400" />
+          <ChevronRight className="w-4 h-4 ml-auto shrink-0 text-white/40" />
         </Link>
       </div>
 
       {/* Applications */}
-      <div className="bg-white dark:bg-slate-800 rounded-xl border border-white/15 overflow-hidden">
+      <div className="bg-white/10 backdrop-blur-2xl rounded-xl border border-white/15 overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
           <h2 className="font-bold text-white flex items-center gap-2">
             <FileText className="w-4 h-4 text-makati-blue" /> My Applications
@@ -108,7 +108,7 @@ export default async function DashboardPage() {
                   <p className="text-sm font-semibold text-white">
                     {(app.type as string)?.replace(/_/g, " ") ?? "Application"}
                   </p>
-                  <p className="text-xs text-gray-400 font-mono">{app.referenceNumber}</p>
+                  <p className="text-xs text-white/40 font-mono">{app.referenceNumber}</p>
                   {app.status === "UNDER_REVIEW" && (
                     <p className="text-xs text-blue-500 mt-0.5">
                       {APPROVAL_LEVEL_LABELS[app.approvalLevel ?? 0]}
@@ -128,7 +128,7 @@ export default async function DashboardPage() {
       {/* Appointments + Certificates row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Upcoming Appointments */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-white/15 overflow-hidden">
+        <div className="bg-white/10 backdrop-blur-2xl rounded-xl border border-white/15 overflow-hidden">
           <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
             <h2 className="font-bold text-white text-sm flex items-center gap-2">
               <CalendarDays className="w-4 h-4 text-makati-blue" /> Appointments
@@ -144,7 +144,7 @@ export default async function DashboardPage() {
                   <p className="text-sm font-medium text-white">
                     {(appt.serviceType as string).replace(/_/g, " ")}
                   </p>
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-white/40">
                     {new Date(appt.preferredDate).toLocaleDateString("en-PH", { month: "short", day: "numeric", year: "numeric" })}
                   </p>
                 </div>
@@ -154,7 +154,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Certificates */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-white/15 overflow-hidden">
+        <div className="bg-white/10 backdrop-blur-2xl rounded-xl border border-white/15 overflow-hidden">
           <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
             <h2 className="font-bold text-white text-sm flex items-center gap-2">
               <Award className="w-4 h-4 text-makati-blue" /> Certificates
@@ -182,7 +182,7 @@ export default async function DashboardPage() {
 
       {/* Active Cases */}
       {cases && cases.length > 0 && (
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-white/15 overflow-hidden">
+        <div className="bg-white/10 backdrop-blur-2xl rounded-xl border border-white/15 overflow-hidden">
           <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
             <h2 className="font-bold text-white text-sm flex items-center gap-2">
               <Briefcase className="w-4 h-4 text-makati-blue" /> Active Cases
@@ -196,7 +196,7 @@ export default async function DashboardPage() {
                   <p className="text-sm font-medium text-white">
                     {(c.category as string).replace(/_/g, " ")}
                   </p>
-                  <p className="text-xs font-mono text-gray-400">{c.caseNumber}</p>
+                  <p className="text-xs font-mono text-white/40">{c.caseNumber}</p>
                 </div>
                 <span className="badge-review">{c.status}</span>
               </div>

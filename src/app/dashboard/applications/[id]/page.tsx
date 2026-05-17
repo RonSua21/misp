@@ -111,7 +111,7 @@ export default async function ApplicationDetailPage({
       <div>
         <Link
           href="/dashboard/applications"
-          className="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-makati-blue transition-colors mb-4"
+          className="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-makati-gold transition-colors mb-4"
         >
           <ArrowLeft className="w-4 h-4" /> Back to My Applications
         </Link>
@@ -119,7 +119,7 @@ export default async function ApplicationDetailPage({
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h1 className="text-2xl font-extrabold text-white">Application Details</h1>
-            <p className="font-mono text-sm text-makati-blue mt-0.5 flex items-center gap-1">
+            <p className="font-mono text-sm text-makati-gold mt-0.5 flex items-center gap-1">
               <Hash className="w-3.5 h-3.5" />{app.referenceNumber}
             </p>
           </div>
@@ -161,7 +161,7 @@ export default async function ApplicationDetailPage({
             })}
           </div>
           {app.status === "DISBURSED" && (
-            <p className="mt-4 text-sm text-purple-700 bg-purple-50 rounded-lg px-3 py-2">
+            <p className="mt-4 text-sm text-purple-300 bg-purple-400/10 border border-purple-400/20 rounded-xl px-3 py-2">
               <Banknote className="w-4 h-4 inline mr-1" />
               Your benefit has been disbursed. Please visit the MSWD office if you have not yet claimed it.
             </p>
@@ -184,12 +184,12 @@ export default async function ApplicationDetailPage({
         {/* Application Info */}
         <div className="card p-6 space-y-4">
           <h2 className="font-bold text-white flex items-center gap-2">
-            <FileText className="w-4 h-4 text-makati-blue" /> Application Info
+            <FileText className="w-4 h-4 text-makati-gold" /> Application Info
           </h2>
           <div className="space-y-3 text-sm">
             <div className="flex justify-between gap-2">
               <span className="text-white/50">Program</span>
-              <span className="font-semibold text-gray-900 dark:text-slate-100 text-right">{program?.name ?? "—"}</span>
+              <span className="font-semibold text-white text-right">{program?.name ?? "—"}</span>
             </div>
             <div className="flex justify-between gap-2">
               <span className="text-white/50">Category</span>
@@ -216,8 +216,8 @@ export default async function ApplicationDetailPage({
             </div>
             {app.amountApproved && (
               <div className="flex justify-between gap-2">
-                <span className="text-gray-400">Benefit Awarded</span>
-                <span className="font-bold text-green-700">
+                <span className="text-white/50">Benefit Awarded</span>
+                <span className="font-bold text-green-300">
                   ₱ {Number(app.amountApproved).toLocaleString("en-PH")}
                 </span>
               </div>
@@ -228,13 +228,13 @@ export default async function ApplicationDetailPage({
         {/* Purpose + Remarks */}
         <div className="card p-6 space-y-4">
           <h2 className="font-bold text-white flex items-center gap-2">
-            <MessageSquare className="w-4 h-4 text-makati-blue" /> Purpose & Remarks
+            <MessageSquare className="w-4 h-4 text-makati-gold" /> Purpose & Remarks
           </h2>
           <div>
             <p className="text-xs text-white/50 uppercase tracking-wide font-semibold mb-1.5">
               Your stated purpose
             </p>
-            <p className="text-sm text-white/80 bg-gray-50 dark:bg-slate-700/50 rounded-lg p-3 leading-relaxed">
+            <p className="text-sm text-white/80 bg-white/5 rounded-lg p-3 leading-relaxed">
               {app.purpose}
             </p>
           </div>
@@ -243,9 +243,9 @@ export default async function ApplicationDetailPage({
               <p className="text-xs text-white/50 uppercase tracking-wide font-semibold mb-1.5">
                 Staff remarks
               </p>
-              <div className="flex gap-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-100 dark:border-yellow-800 rounded-lg p-3">
-                <AlertCircle className="w-4 h-4 text-yellow-600 shrink-0 mt-0.5" />
-                <p className="text-sm text-yellow-800 dark:text-yellow-400 leading-relaxed">{app.remarks}</p>
+              <div className="flex gap-2 bg-amber-400/10 border border-amber-400/20 rounded-xl p-3">
+                <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <p className="text-sm text-amber-300 leading-relaxed">{app.remarks}</p>
               </div>
             </div>
           ) : (
@@ -257,16 +257,16 @@ export default async function ApplicationDetailPage({
       {/* Submitted Documents */}
       <div className="card p-6">
         <h2 className="font-bold text-white mb-4 flex items-center gap-2">
-          <FileText className="w-4 h-4 text-makati-blue" /> Submitted Documents
+          <FileText className="w-4 h-4 text-makati-gold" /> Submitted Documents
         </h2>
         {!documents || documents.length === 0 ? (
           <p className="text-sm text-white/50">No documents attached to this application.</p>
         ) : (
           <div className="space-y-2">
             {documents.map((doc) => (
-              <div key={doc.id} className="flex items-center justify-between py-2.5 px-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg">
+              <div key={doc.id} className="flex items-center justify-between py-2.5 px-3 bg-white/5 rounded-xl border border-white/10">
                 <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-slate-100">
+                  <p className="text-sm font-medium text-white">
                     {doc.type.replace(/_/g, " ")}
                   </p>
                   <p className="text-xs text-white/50 mt-0.5">
@@ -275,9 +275,9 @@ export default async function ApplicationDetailPage({
                 </div>
                 <div className="flex items-center gap-3">
                   <span className={`text-xs font-semibold px-2 py-0.5 rounded-full
-                    ${doc.status === "VERIFIED" ? "bg-green-100 text-green-700"
-                    : doc.status === "REJECTED" ? "bg-red-100 text-red-700"
-                    : "bg-yellow-100 text-yellow-700"}`}
+                    ${doc.status === "VERIFIED" ? "bg-green-400/20 text-green-300"
+                    : doc.status === "REJECTED" ? "bg-red-400/20 text-red-300"
+                    : "bg-yellow-400/20 text-yellow-300"}`}
                   >
                     {doc.status}
                   </span>
@@ -285,7 +285,7 @@ export default async function ApplicationDetailPage({
                     href={doc.fileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs text-makati-blue font-medium hover:underline"
+                    className="text-xs text-makati-gold font-medium hover:underline"
                   >
                     View
                   </a>
@@ -300,21 +300,21 @@ export default async function ApplicationDetailPage({
       {history && history.length > 0 && (
         <div className="card p-6">
           <h2 className="font-bold text-white mb-4 flex items-center gap-2">
-            <Clock className="w-4 h-4 text-makati-blue" /> Status History
+            <Clock className="w-4 h-4 text-makati-gold" /> Status History
           </h2>
           <ol className="space-y-3">
             {history.map((entry, i) => (
               <li key={entry.id} className="flex gap-3">
                 <div className="flex flex-col items-center">
                   <div className={`w-2.5 h-2.5 rounded-full mt-1.5 shrink-0
-                    ${i === 0 ? "bg-makati-blue" : "bg-gray-300 dark:bg-slate-600"}`}
+                    ${i === 0 ? "bg-makati-gold" : "bg-white/30"}`}
                   />
                   {i < history.length - 1 && (
-                    <div className="w-px flex-1 bg-gray-200 dark:bg-slate-700 mt-1" />
+                    <div className="w-px flex-1 bg-white/20 mt-1" />
                   )}
                 </div>
                 <div className="pb-4">
-                  <p className="text-sm font-semibold text-gray-900 dark:text-slate-100">
+                  <p className="text-sm font-semibold text-white">
                     {entry.fromStatus
                       ? `${(entry.fromStatus as string).replace(/_/g, " ")} → ${(entry.toStatus as string).replace(/_/g, " ")}`
                       : (entry.toStatus as string).replace(/_/g, " ")
@@ -324,7 +324,7 @@ export default async function ApplicationDetailPage({
                     )}
                   </p>
                   {entry.rejectionCode && (
-                    <p className="text-xs text-red-600 dark:text-red-400 mt-0.5">
+                    <p className="text-xs text-red-400 mt-0.5">
                       {REJECTION_MESSAGES[entry.rejectionCode as string] ?? (entry.rejectionCode as string).replace(/_/g, " ")}
                     </p>
                   )}

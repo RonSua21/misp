@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -76,15 +76,15 @@ export default async function AppointmentsPage() {
 
       <div className="space-y-3">
         {(appointments ?? []).map(a => (
-          <div key={a.id} className="bg-white dark:bg-slate-800 rounded-xl border border-white/15 p-4 space-y-2">
+          <div key={a.id} className="bg-white/10 backdrop-blur-2xl rounded-xl border border-white/15 p-4 space-y-2">
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="font-semibold text-white text-sm">{SERVICE_LABELS[a.serviceType] ?? a.serviceType}</p>
                 <p className="text-xs text-white/60">
-                  {new Date(a.preferredDate + "T00:00:00").toLocaleDateString("en-PH", { weekday: "long", month: "long", day: "numeric", year: "numeric" })} · {formatTime(a.preferredTime)}
+                  {new Date(a.preferredDate + "T00:00:00").toLocaleDateString("en-PH", { weekday: "long", month: "long", day: "numeric", year: "numeric" })} Â· {formatTime(a.preferredTime)}
                 </p>
               </div>
-              <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold shrink-0 ${STATUS_STYLES[a.status] ?? "bg-gray-100 text-gray-600"}`}>
+              <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold shrink-0 ${STATUS_STYLES[a.status] ?? "bg-white/10 text-white/60 border border-white/20"}`}>
                 {STATUS_LABELS[a.status] ?? a.status}
               </span>
             </div>
@@ -103,4 +103,5 @@ export default async function AppointmentsPage() {
     </div>
   );
 }
+
 

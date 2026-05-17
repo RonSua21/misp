@@ -73,7 +73,7 @@ export default async function CertificatesPage() {
                 <p className="font-semibold text-white text-sm">{CERT_LABELS[r.type] ?? r.type}</p>
                 <p className="text-xs text-white/60 font-mono">{r.referenceNumber}</p>
               </div>
-              <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold shrink-0 ${STATUS_STYLES[r.status] ?? "bg-gray-100 text-gray-600"}`}>
+              <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold shrink-0 ${STATUS_STYLES[r.status] ?? "bg-white/10 text-white/60 border border-white/20"}`}>
                 {STATUS_LABELS[r.status] ?? r.status}
               </span>
             </div>

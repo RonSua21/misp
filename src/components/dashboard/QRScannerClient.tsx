@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Scanner } from "@yudiel/react-qr-scanner";
@@ -17,7 +17,7 @@ function extractCenterId(raw: string): string | null {
     const idx = parts.indexOf("check-in");
     if (idx !== -1 && parts[idx + 1]) return parts[idx + 1];
   } catch {
-    // Not a URL — treat the raw value itself as a center ID (UUID format)
+    // Not a URL â€” treat the raw value itself as a center ID (UUID format)
     const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     if (uuidPattern.test(raw.trim())) return raw.trim();
   }
@@ -77,7 +77,7 @@ export default function QRScannerClient() {
     checkIn(centerId);
   };
 
-  // ── Success state ────────────────────────────────────────────────────────────
+  // â”€â”€ Success state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (state === "success") {
     return (
       <div className="flex flex-col items-center text-center gap-5 py-10 px-6">
@@ -85,11 +85,11 @@ export default function QRScannerClient() {
           <CheckCircle className="w-10 h-10 text-green-600" />
         </div>
         <div>
-          <h2 className="text-xl font-extrabold text-gray-900">Checked in!</h2>
-          <p className="text-gray-500 mt-1 text-sm">
-            You have been registered at <span className="font-semibold text-gray-700">{centerName}</span>.
+          <h2 className="text-xl font-extrabold text-white">Checked in!</h2>
+          <p className="text-white/50 mt-1 text-sm">
+            You have been registered at <span className="font-semibold text-white/70">{centerName}</span>.
           </p>
-          <p className="text-xs text-gray-400 mt-3">Redirecting to dashboard in 3 seconds…</p>
+          <p className="text-xs text-white/40 mt-3">Redirecting to dashboard in 3 secondsâ€¦</p>
         </div>
         <button
           onClick={() => router.push("/dashboard")}
@@ -101,7 +101,7 @@ export default function QRScannerClient() {
     );
   }
 
-  // ── Error state ──────────────────────────────────────────────────────────────
+  // â”€â”€ Error state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (state === "error") {
     return (
       <div className="flex flex-col items-center text-center gap-5 py-10 px-6">
@@ -109,8 +109,8 @@ export default function QRScannerClient() {
           <AlertCircle className="w-10 h-10 text-red-500" />
         </div>
         <div>
-          <h2 className="text-xl font-extrabold text-gray-900">Check-in Failed</h2>
-          <p className="text-gray-500 mt-2 text-sm max-w-xs">{message}</p>
+          <h2 className="text-xl font-extrabold text-white">Check-in Failed</h2>
+          <p className="text-white/50 mt-2 text-sm max-w-xs">{message}</p>
         </div>
         <button
           onClick={() => { setState("scanning"); setMessage(""); }}
@@ -120,7 +120,7 @@ export default function QRScannerClient() {
         </button>
         <button
           onClick={() => router.push("/dashboard")}
-          className="text-sm text-gray-500 hover:text-gray-700"
+          className="text-sm text-white/50 hover:text-white/70"
         >
           Back to Dashboard
         </button>
@@ -128,17 +128,17 @@ export default function QRScannerClient() {
     );
   }
 
-  // ── Loading state ────────────────────────────────────────────────────────────
+  // â”€â”€ Loading state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (state === "loading") {
     return (
       <div className="flex flex-col items-center text-center gap-4 py-16 px-6">
         <div className="w-12 h-12 border-4 border-makati-blue border-t-transparent rounded-full animate-spin" />
-        <p className="text-gray-600 font-medium">Checking you in…</p>
+        <p className="text-white/60 font-medium">Checking you inâ€¦</p>
       </div>
     );
   }
 
-  // ── Idle (start screen) ──────────────────────────────────────────────────────
+  // â”€â”€ Idle (start screen) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (state === "idle") {
     return (
       <div className="flex flex-col items-center text-center gap-6 py-10 px-6">
@@ -146,8 +146,8 @@ export default function QRScannerClient() {
           <QrCode className="w-10 h-10 text-makati-blue" />
         </div>
         <div>
-          <h2 className="text-xl font-extrabold text-gray-900">Evacuation Check-in</h2>
-          <p className="text-gray-500 mt-2 text-sm max-w-xs">
+          <h2 className="text-xl font-extrabold text-white">Evacuation Check-in</h2>
+          <p className="text-white/50 mt-2 text-sm max-w-xs">
             Scan the QR code displayed at your evacuation center to register your presence.
           </p>
         </div>
@@ -169,13 +169,13 @@ export default function QRScannerClient() {
     );
   }
 
-  // ── Scanning state ───────────────────────────────────────────────────────────
+  // â”€â”€ Scanning state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   return (
     <div className="flex flex-col gap-4">
       {/* Back button */}
       <button
         onClick={() => { setState("idle"); setCameraError(false); setManualMode(false); }}
-        className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 self-start"
+        className="flex items-center gap-1.5 text-sm text-white/50 hover:text-white/70 self-start"
       >
         <ArrowLeft className="w-4 h-4" /> Back
       </button>
@@ -184,14 +184,14 @@ export default function QRScannerClient() {
         /* Manual entry fallback */
         <div className="space-y-4">
           {cameraError && (
-            <div className="flex items-start gap-2.5 p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
-              <CameraOff className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" />
+            <div className="flex items-start gap-2.5 p-3.5 bg-amber-400/10 border border-amber-400/25 rounded-xl text-sm text-amber-300">
+              <CameraOff className="w-4 h-4 shrink-0 mt-0.5 text-amber-400" />
               Camera access was denied. Please enter the Center ID manually or allow camera access in your browser settings.
             </div>
           )}
           <div>
-            <h2 className="text-lg font-extrabold text-gray-900 mb-1">Enter Center ID</h2>
-            <p className="text-sm text-gray-500 mb-4">
+            <h2 className="text-lg font-extrabold text-white mb-1">Enter Center ID</h2>
+            <p className="text-sm text-white/50 mb-4">
               Ask the MSWD staff at the evacuation center for the Center ID or the check-in URL.
             </p>
             <form onSubmit={handleManualSubmit} className="space-y-3">
@@ -223,8 +223,8 @@ export default function QRScannerClient() {
         /* Camera scanner */
         <div className="space-y-4">
           <div>
-            <h2 className="text-lg font-extrabold text-gray-900">Point at QR Code</h2>
-            <p className="text-sm text-gray-500 mt-1">
+            <h2 className="text-lg font-extrabold text-white">Point at QR Code</h2>
+            <p className="text-sm text-white/50 mt-1">
               Hold your camera steady over the QR code at the evacuation center.
             </p>
           </div>
@@ -250,7 +250,7 @@ export default function QRScannerClient() {
 
           <button
             onClick={() => { setManualMode(true); }}
-            className="flex items-center justify-center gap-2 text-sm text-gray-500 hover:text-gray-700 w-full"
+            className="flex items-center justify-center gap-2 text-sm text-white/50 hover:text-white/70 w-full"
           >
             <Keyboard className="w-4 h-4" />
             Can&apos;t scan? Enter code manually
@@ -260,4 +260,3 @@ export default function QRScannerClient() {
     </div>
   );
 }
-

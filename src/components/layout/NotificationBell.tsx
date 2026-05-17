@@ -14,9 +14,9 @@ interface Notification {
 }
 
 const TYPE_CONFIG: Record<NotificationType, { icon: React.ElementType; color: string; bg: string }> = {
-  APPLICATION_UPDATE: { icon: FileText,      color: "text-blue-600",  bg: "bg-blue-50" },
-  ANNOUNCEMENT:       { icon: Megaphone,      color: "text-green-600", bg: "bg-green-50" },
-  DISASTER_ALERT:     { icon: AlertTriangle,  color: "text-red-600",   bg: "bg-red-50" },
+  APPLICATION_UPDATE: { icon: FileText,      color: "text-blue-300",  bg: "bg-blue-400/20" },
+  ANNOUNCEMENT:       { icon: Megaphone,      color: "text-green-300", bg: "bg-green-400/20" },
+  DISASTER_ALERT:     { icon: AlertTriangle,  color: "text-red-300",   bg: "bg-red-400/20" },
 };
 
 function timeAgo(iso: string) {
@@ -93,10 +93,10 @@ export default function NotificationBell() {
       {/* Bell trigger */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+        className="relative p-2 rounded-lg hover:bg-white/10 transition-colors"
         aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} unread)` : ""}`}
       >
-        <Bell className="w-5 h-5 text-gray-600 dark:text-slate-400" />
+        <Bell className="w-5 h-5 text-white/60" />
         {unreadCount > 0 && (
           <span className="absolute top-1 right-1 min-w-[16px] h-4 flex items-center justify-center text-[10px] font-bold text-white bg-red-500 rounded-full px-0.5">
             {unreadCount > 9 ? "9+" : unreadCount}
@@ -106,33 +106,33 @@ export default function NotificationBell() {
 
       {/* Dropdown panel */}
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 z-50 overflow-hidden">
+        <div className="absolute right-0 top-full mt-2 w-80 bg-makati-blue/80 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/15 z-50 overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-slate-700">
-            <h3 className="font-bold text-gray-900 dark:text-white text-sm">Notifications</h3>
+          <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+            <h3 className="font-bold text-white text-sm">Notifications</h3>
             <div className="flex items-center gap-2">
               {unreadCount > 0 && (
                 <button
                   onClick={markAllRead}
                   disabled={loading}
-                  className="flex items-center gap-1 text-xs text-makati-blue hover:underline disabled:opacity-50"
+                  className="flex items-center gap-1 text-xs text-makati-gold hover:underline disabled:opacity-50"
                 >
                   <CheckCheck className="w-3.5 h-3.5" />
                   Mark all read
                 </button>
               )}
-              <button onClick={() => setOpen(false)} className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300">
+              <button onClick={() => setOpen(false)} className="text-white/40 hover:text-white/70">
                 <X className="w-4 h-4" />
               </button>
             </div>
           </div>
 
           {/* List */}
-          <div className="max-h-[360px] overflow-y-auto divide-y divide-gray-50 dark:divide-slate-800">
+          <div className="max-h-[360px] overflow-y-auto divide-y divide-white/5">
             {notifications.length === 0 ? (
               <div className="px-4 py-10 text-center">
-                <Bell className="w-8 h-8 text-gray-200 dark:text-slate-700 mx-auto mb-2" />
-                <p className="text-sm text-gray-400 dark:text-slate-500">No notifications yet</p>
+                <Bell className="w-8 h-8 text-white/20 mx-auto mb-2" />
+                <p className="text-sm text-white/40">No notifications yet</p>
               </div>
             ) : (
               notifications.map((n) => {
@@ -143,7 +143,7 @@ export default function NotificationBell() {
                     key={n.id}
                     onClick={() => !n.isRead && markRead(n.id)}
                     className={`w-full text-left px-4 py-3 flex gap-3 transition-colors ${
-                      n.isRead ? "opacity-60" : "hover:bg-gray-50 dark:hover:bg-slate-800"
+                      n.isRead ? "opacity-50" : "hover:bg-white/10"
                     }`}
                   >
                     <div className={`mt-0.5 w-8 h-8 rounded-full ${cfg.bg} flex items-center justify-center shrink-0`}>
@@ -151,15 +151,15 @@ export default function NotificationBell() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
-                        <p className={`text-sm font-semibold text-gray-900 dark:text-white leading-tight ${!n.isRead ? "" : "font-normal"}`}>
+                        <p className={`text-sm leading-tight text-white ${!n.isRead ? "font-semibold" : "font-normal"}`}>
                           {n.title}
                         </p>
                         {!n.isRead && (
-                          <span className="w-2 h-2 rounded-full bg-makati-blue shrink-0 mt-1" />
+                          <span className="w-2 h-2 rounded-full bg-makati-gold shrink-0 mt-1" />
                         )}
                       </div>
-                      <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5 line-clamp-2">{n.message}</p>
-                      <p className="text-[10px] text-gray-400 dark:text-slate-500 mt-1">{timeAgo(n.createdAt)}</p>
+                      <p className="text-xs text-white/50 mt-0.5 line-clamp-2">{n.message}</p>
+                      <p className="text-[10px] text-white/30 mt-1">{timeAgo(n.createdAt)}</p>
                     </div>
                   </button>
                 );

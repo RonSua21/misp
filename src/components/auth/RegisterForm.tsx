@@ -149,12 +149,12 @@ export default function RegisterForm() {
   if (success) {
     return (
       <div className="text-center py-6">
-        <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-          <CheckCircle2 className="w-8 h-8 text-green-600" />
+        <div className="w-16 h-16 rounded-full bg-green-400/20 border border-green-400/30 flex items-center justify-center mx-auto mb-4">
+          <CheckCircle2 className="w-8 h-8 text-green-400" />
         </div>
-        <h3 className="text-xl font-bold text-gray-900 mb-2">Check Your Email</h3>
-        <p className="text-gray-500 text-sm max-w-xs mx-auto mb-6">
-          We sent a confirmation link to <strong>{form.email}</strong>. Click the link to
+        <h3 className="text-xl font-bold text-white mb-2">Check Your Email</h3>
+        <p className="text-white/60 text-sm max-w-xs mx-auto mb-6">
+          We sent a confirmation link to <strong className="text-white/80">{form.email}</strong>. Click the link to
           activate your account.
         </p>
         <Link href="/login" className="btn-primary">
@@ -167,7 +167,7 @@ export default function RegisterForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       {globalError && (
-        <div className="flex items-start gap-2.5 p-3 bg-red-50 border border-red-200 rounded text-sm text-red-700">
+        <div className="flex items-start gap-2.5 p-3.5 bg-red-400/10 border border-red-400/20 rounded-xl text-sm text-red-300">
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
           {globalError}
         </div>
@@ -175,7 +175,7 @@ export default function RegisterForm() {
 
       {/* Section: Personal Information */}
       <div>
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-gray-100">
+        <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/10">
           Personal Information
         </p>
         <div className="space-y-4">
@@ -208,7 +208,7 @@ export default function RegisterForm() {
 
       {/* Section: Contact & Location */}
       <div>
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-gray-100">
+        <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/10">
           Contact & Location
         </p>
         <div className="space-y-4">
@@ -233,7 +233,7 @@ export default function RegisterForm() {
           />
           <div>
             <label className="label">
-              Barangay <span className="text-red-500 ml-0.5">*</span>
+              Barangay <span className="text-red-400 ml-0.5">*</span>
             </label>
             <select
               value={form.barangay}
@@ -241,19 +241,19 @@ export default function RegisterForm() {
               className={`input ${errors.barangay ? "input-error" : ""}`}
               required
             >
-              <option value="">— Select your barangay in Makati City —</option>
+              <option value="" className="bg-slate-800 text-white">— Select your barangay in Makati City —</option>
               {MAKATI_BARANGAYS.map((b) => (
-                <option key={b} value={b}>{b}</option>
+                <option key={b} value={b} className="bg-slate-800 text-white">{b}</option>
               ))}
             </select>
-            {errors.barangay && <p className="mt-1 text-xs text-red-600">{errors.barangay}</p>}
+            {errors.barangay && <p className="mt-1 text-xs text-red-400">{errors.barangay}</p>}
           </div>
         </div>
       </div>
 
       {/* Section: Account Security */}
       <div>
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-gray-100">
+        <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/10">
           Account Security
         </p>
         <div className="space-y-4">
@@ -272,7 +272,7 @@ export default function RegisterForm() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-[34px] text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-[34px] text-white/40 hover:text-white/70"
               aria-label="Toggle password visibility"
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -293,7 +293,7 @@ export default function RegisterForm() {
             <button
               type="button"
               onClick={() => setShowConfirm(!showConfirm)}
-              className="absolute right-3 top-[34px] text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-[34px] text-white/40 hover:text-white/70"
               aria-label="Toggle confirm password visibility"
             >
               {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -304,30 +304,30 @@ export default function RegisterForm() {
 
       {/* Section: Data Privacy Consent */}
       <div>
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-gray-100">
+        <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/10">
           Data Privacy Consent
         </p>
-        <div className={`p-3.5 rounded border text-xs ${errors.consentGiven ? "border-red-300 bg-red-50" : "border-gray-200 bg-gray-50"}`}>
+        <div className={`p-3.5 rounded-xl border text-xs ${errors.consentGiven ? "border-red-400/40 bg-red-400/5" : "border-white/15 bg-white/5"}`}>
           <label className="flex items-start gap-3 cursor-pointer">
             <input
               type="checkbox"
               checked={form.consentGiven}
               onChange={(e) => set("consentGiven", e.target.checked)}
-              className="mt-0.5 w-4 h-4 accent-makati-blue shrink-0"
+              className="mt-0.5 w-4 h-4 accent-makati-gold shrink-0"
             />
-            <span className="text-gray-600 leading-relaxed">
+            <span className="text-white/60 leading-relaxed">
               I consent to the collection and processing of my personal data by the{" "}
-              <strong className="text-gray-800">Makati Social Welfare Department</strong> in accordance with the{" "}
-              <strong className="text-gray-800">Philippine Data Privacy Act of 2012 (R.A. 10173)</strong> and its
+              <strong className="text-white/80">Makati Social Welfare Department</strong> in accordance with the{" "}
+              <strong className="text-white/80">Philippine Data Privacy Act of 2012 (R.A. 10173)</strong> and its
               Implementing Rules and Regulations. My data will be used solely for the
               purpose of processing social welfare assistance applications.{" "}
-              <Link href="/privacy" className="text-makati-blue underline hover:no-underline">
+              <Link href="/privacy" className="text-makati-gold underline hover:no-underline">
                 Read full privacy notice.
               </Link>
             </span>
           </label>
           {errors.consentGiven && (
-            <p className="mt-2 text-xs text-red-600 flex items-center gap-1">
+            <p className="mt-2 text-xs text-red-400 flex items-center gap-1">
               <AlertCircle className="w-3 h-3" /> {errors.consentGiven}
             </p>
           )}
@@ -339,9 +339,9 @@ export default function RegisterForm() {
         Submit Registration
       </Button>
 
-      <p className="text-center text-sm text-gray-500 pb-1">
+      <p className="text-center text-sm text-white/50 pb-1">
         Already have an account?{" "}
-        <Link href="/login" className="text-makati-blue font-semibold hover:underline">
+        <Link href="/login" className="text-makati-gold font-semibold hover:underline">
           Sign in here
         </Link>
       </p>

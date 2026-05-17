@@ -124,8 +124,8 @@ export default function SettingsClient({ userEmail }: { userEmail: string }) {
               onClick={() => theme === "dark" && toggle()}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors
                 ${theme === "light"
-                  ? "bg-white dark:bg-slate-600 text-white shadow-sm"
-                  : "text-white/60 hover:text-gray-700 dark:hover:text-slate-200"}`}
+                  ? "bg-white/20 text-white shadow-sm"
+                  : "text-white/60 hover:text-white"}`}
             >
               <Sun className="w-3.5 h-3.5" /> Light
             </button>
@@ -133,8 +133,8 @@ export default function SettingsClient({ userEmail }: { userEmail: string }) {
               onClick={() => theme === "light" && toggle()}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors
                 ${theme === "dark"
-                  ? "bg-slate-600 text-white shadow-sm"
-                  : "text-white/60 hover:text-gray-700 dark:hover:text-slate-200"}`}
+                  ? "bg-white/20 text-white shadow-sm"
+                  : "text-white/60 hover:text-white"}`}
             >
               <Moon className="w-3.5 h-3.5" /> Dark
             </button>
@@ -179,10 +179,10 @@ export default function SettingsClient({ userEmail }: { userEmail: string }) {
               onClick={() => updateLanguage(value)}
               className={`flex flex-col items-start px-4 py-3 rounded-lg border-2 transition-colors text-left
                 ${settings.language === value
-                  ? "border-makati-blue bg-makati-blue-light dark:bg-blue-900/30"
-                  : "border-gray-200 dark:border-slate-700 hover:bg-white/10"}`}
+                  ? "border-makati-gold bg-white/15"
+                  : "border-white/20 hover:bg-white/10"}`}
             >
-              <p className={`text-sm font-semibold ${settings.language === value ? "text-makati-blue dark:text-blue-400" : "text-white/80"}`}>
+              <p className={`text-sm font-semibold ${settings.language === value ? "text-makati-gold" : "text-white/80"}`}>
                 {label}
               </p>
               <p className="text-xs text-white/50">{sub}</p>
@@ -198,7 +198,7 @@ export default function SettingsClient({ userEmail }: { userEmail: string }) {
       <div className="card p-6">
         <SectionHeader icon={ShieldCheck} title="Account Security" />
         <p className="text-xs text-white/50 mb-4">
-          Signed in as <span className="font-medium text-gray-600 dark:text-slate-400">{userEmail}</span>
+          Signed in as <span className="font-medium text-white/70">{userEmail}</span>
         </p>
         <form onSubmit={handlePasswordChange} className="space-y-3">
           <div>
@@ -215,7 +215,7 @@ export default function SettingsClient({ userEmail }: { userEmail: string }) {
               <button
                 type="button"
                 onClick={() => setShowNew(p => !p)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-slate-300"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70"
               >
                 {showNew ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -235,7 +235,7 @@ export default function SettingsClient({ userEmail }: { userEmail: string }) {
               <button
                 type="button"
                 onClick={() => setShowConfirm(p => !p)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-slate-300"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70"
               >
                 {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -255,8 +255,8 @@ export default function SettingsClient({ userEmail }: { userEmail: string }) {
       {toast && (
         <div className={`fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-xl shadow-xl text-sm font-medium transition-all
           ${toast.ok
-            ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
-            : "bg-red-600 text-white"}`}
+            ? "bg-white/15 backdrop-blur-xl border border-white/20 text-white"
+            : "bg-red-400/20 border border-red-400/30 text-red-300"}`}
         >
           {toast.ok
             ? <CheckCircle2 className="w-4 h-4 shrink-0" />

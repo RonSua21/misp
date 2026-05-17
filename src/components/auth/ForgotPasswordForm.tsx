@@ -41,14 +41,14 @@ export default function ForgotPasswordForm() {
     return (
       <div className="space-y-5">
         <div className="flex flex-col items-center text-center gap-3 py-4">
-          <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-            <CheckCircle className="w-6 h-6 text-green-600" />
+          <div className="w-12 h-12 rounded-full bg-green-400/20 border border-green-400/30 flex items-center justify-center">
+            <CheckCircle className="w-6 h-6 text-green-400" />
           </div>
           <div>
-            <p className="font-semibold text-gray-900">Check your inbox</p>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="font-semibold text-white">Check your inbox</p>
+            <p className="text-sm text-white/60 mt-1">
               We sent a password reset link to{" "}
-              <span className="font-medium text-gray-700">{email}</span>.
+              <span className="font-medium text-white/80">{email}</span>.
               It may take a minute to arrive.
             </p>
           </div>
@@ -67,7 +67,7 @@ export default function ForgotPasswordForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-5" noValidate>
       {error && (
-        <div className="flex items-start gap-2.5 p-3.5 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+        <div className="flex items-start gap-2.5 p-3.5 bg-red-400/10 border border-red-400/20 rounded-xl text-sm text-red-300">
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
           {error}
         </div>
@@ -90,7 +90,7 @@ export default function ForgotPasswordForm() {
 
       <Link
         href="/login"
-        className="flex items-center justify-center gap-2 text-sm text-gray-500 hover:text-gray-700"
+        className="flex items-center justify-center gap-2 text-sm text-white/50 hover:text-white/80"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to Login

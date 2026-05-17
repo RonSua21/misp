@@ -47,22 +47,22 @@ export default function NewApplicationButton({ label, variant = "primary", isVer
           onClick={() => setShowModal(false)}
         >
           <div
-            className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-5"
+            className="bg-makati-blue/80 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/15 w-full max-w-md p-6 space-y-5"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-makati-blue-light shrink-0">
-                  <MapPin className="w-5 h-5 text-makati-blue" />
+                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/15 shrink-0">
+                  <MapPin className="w-5 h-5 text-makati-gold" />
                 </div>
-                <h2 className="text-lg font-extrabold text-gray-900 leading-tight">
+                <h2 className="text-lg font-extrabold text-white leading-tight">
                   Location Verification Required
                 </h2>
               </div>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors shrink-0 mt-0.5"
+                className="text-white/40 hover:text-white/70 transition-colors shrink-0 mt-0.5"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />
@@ -70,7 +70,7 @@ export default function NewApplicationButton({ label, variant = "primary", isVer
             </div>
 
             {/* Body */}
-            <p className="text-sm text-gray-600 leading-relaxed">
+            <p className="text-sm text-white/70 leading-relaxed">
               You must verify your location as a Makati citizen before starting a new application.
               Please go to your profile and upload a valid proof of residency or government-issued ID.
             </p>
@@ -82,14 +82,14 @@ export default function NewApplicationButton({ label, variant = "primary", isVer
                   setShowModal(false);
                   router.push("/dashboard/profile");
                 }}
-                className="flex-1 inline-flex items-center justify-center gap-2 bg-makati-blue text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:bg-blue-800 active:scale-95 transition-all"
+                className="flex-1 btn-primary justify-center"
               >
                 <MapPin className="w-4 h-4" />
                 Verify Location
               </button>
               <button
                 onClick={() => setShowModal(false)}
-                className="flex-1 inline-flex items-center justify-center gap-2 bg-white text-makati-blue text-sm font-semibold border border-makati-blue px-5 py-2.5 rounded-lg hover:bg-makati-blue-light active:scale-95 transition-all"
+                className="flex-1 btn-secondary justify-center"
               >
                 Cancel
               </button>

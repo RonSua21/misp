@@ -74,7 +74,7 @@ export default function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-5" noValidate>
       {error && (
-        <div className="flex items-start gap-2.5 p-3.5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-700 dark:text-red-400">
+        <div className="flex items-start gap-2.5 p-3.5 bg-red-400/10 border border-red-400/20 rounded-xl text-sm text-red-300">
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
           {error}
         </div>
@@ -104,7 +104,7 @@ export default function LoginForm() {
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-[34px] text-gray-400 hover:text-gray-600 transition-colors"
+          className="absolute right-3 top-[34px] text-white/40 hover:text-white/70 transition-colors"
           aria-label={showPassword ? "Hide password" : "Show password"}
         >
           {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -114,7 +114,7 @@ export default function LoginForm() {
       <div className="flex items-center justify-end">
         <Link
           href="/forgot-password"
-          className="text-sm text-makati-blue hover:underline font-medium"
+          className="text-sm text-makati-gold hover:underline font-medium"
         >
           Forgot password?
         </Link>
@@ -125,9 +125,9 @@ export default function LoginForm() {
         Sign In
       </Button>
 
-      <p className="text-center text-sm text-gray-500">
+      <p className="text-center text-sm text-white/50">
         Don&apos;t have an account?{" "}
-        <Link href="/register" className="text-makati-blue font-semibold hover:underline">
+        <Link href="/register" className="text-makati-gold font-semibold hover:underline">
           Register here
         </Link>
       </p>

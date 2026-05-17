@@ -258,12 +258,12 @@ export default function AddressVerification({
   return (
     <div className="space-y-6">
       {/* ── GPS Quick Verify ──────────────────────────────────────────────── */}
-      <div className="p-4 bg-makati-blue-light border border-makati-blue/20 rounded-xl">
-        <p className="text-sm font-semibold text-makati-blue mb-1 flex items-center gap-2">
-          <Navigation className="w-4 h-4" />
+      <div className="p-4 bg-white/5 border border-white/15 rounded-xl">
+        <p className="text-sm font-semibold text-white mb-1 flex items-center gap-2">
+          <Navigation className="w-4 h-4 text-makati-gold" />
           Option 1 — Verify with GPS (Recommended)
         </p>
-        <p className="text-xs text-gray-600 mb-3">
+        <p className="text-xs text-white/50 mb-3">
           Use your device&apos;s GPS to instantly confirm you&apos;re within Makati City.
         </p>
 
@@ -271,7 +271,7 @@ export default function AddressVerification({
           <button
             type="button"
             onClick={handleGpsVerify}
-            className="inline-flex items-center gap-2 bg-makati-blue text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors"
+            className="btn-primary text-sm"
           >
             <Navigation className="w-4 h-4" />
             Use My GPS Location
@@ -279,21 +279,21 @@ export default function AddressVerification({
         )}
 
         {gpsState === "loading" && (
-          <div className="flex items-center gap-2 text-sm text-makati-blue">
-            <span className="w-4 h-4 border-2 border-makati-blue border-t-transparent rounded-full animate-spin" />
+          <div className="flex items-center gap-2 text-sm text-white/60">
+            <span className="w-4 h-4 border-2 border-white/60 border-t-transparent rounded-full animate-spin" />
             Detecting your location…
           </div>
         )}
 
         {gpsState === "confirmed_makati" && (
-          <div className="flex items-center gap-2 text-sm text-green-700">
+          <div className="flex items-center gap-2 text-sm text-green-400">
             <CheckCircle2 className="w-4 h-4 shrink-0" />
             {gpsMessage}
           </div>
         )}
 
         {gpsState === "gps_error" && (
-          <div className="flex items-start gap-2 text-sm text-amber-700">
+          <div className="flex items-start gap-2 text-sm text-amber-400">
             <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
             <span>{gpsMessage}</span>
           </div>
@@ -302,20 +302,20 @@ export default function AddressVerification({
 
       {/* ── Manual Address Form ───────────────────────────────────────────── */}
       <form onSubmit={handleVerify} className="space-y-5" noValidate>
-        <p className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-makati-blue" />
+        <p className="text-sm font-semibold text-white/80 flex items-center gap-2">
+          <MapPin className="w-4 h-4 text-makati-gold" />
           Option 2 — Enter Your Address Manually
         </p>
 
         {/* Status messages */}
         {state === "success" && (
-          <div className="flex items-center gap-2.5 p-3.5 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">
+          <div className="flex items-center gap-2.5 p-3.5 bg-green-400/10 border border-green-400/20 rounded-xl text-sm text-green-300">
             <CheckCircle2 className="w-4 h-4 shrink-0" />
             {message}
           </div>
         )}
         {state === "error" && (
-          <div className="flex items-center gap-2.5 p-3.5 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+          <div className="flex items-center gap-2.5 p-3.5 bg-red-400/10 border border-red-400/20 rounded-xl text-sm text-red-300">
             <AlertTriangle className="w-4 h-4 shrink-0" />
             {message}
           </div>
@@ -342,7 +342,7 @@ export default function AddressVerification({
         {/* Barangay */}
         <div>
           <label className="label">
-            Barangay <span className="text-red-500">*</span>
+            Barangay <span className="text-red-400">*</span>
           </label>
           <select
             value={barangay}
@@ -350,17 +350,17 @@ export default function AddressVerification({
               setBarangay(e.target.value);
               setErrors({});
             }}
-            className={`input ${errors.barangay ? "input-error" : ""}`}
+            className={`input ${errors.barangay ? "border-red-400/60" : ""}`}
             disabled={state === "loading"}
             required
           >
-            <option value="">— Select your barangay —</option>
+            <option value="" className="bg-slate-800 text-white">— Select your barangay —</option>
             {MAKATI_BARANGAYS.map((b) => (
-              <option key={b} value={b}>{b}</option>
+              <option key={b} value={b} className="bg-slate-800 text-white">{b}</option>
             ))}
           </select>
           {errors.barangay && (
-            <p className="mt-1 text-xs text-red-600">{errors.barangay}</p>
+            <p className="mt-1 text-xs text-red-400">{errors.barangay}</p>
           )}
         </div>
 
@@ -368,14 +368,14 @@ export default function AddressVerification({
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
             <label className="label">City / Municipality</label>
-            <div className="input bg-gray-50 text-gray-500 flex items-center gap-2 cursor-not-allowed">
+            <div className="input opacity-50 flex items-center gap-2 cursor-not-allowed">
               <Lock className="w-3.5 h-3.5 shrink-0" />
               Makati City
             </div>
           </div>
           <div>
             <label className="label">Province</label>
-            <div className="input bg-gray-50 text-gray-500 flex items-center gap-2 cursor-not-allowed">
+            <div className="input opacity-50 flex items-center gap-2 cursor-not-allowed">
               <Lock className="w-3.5 h-3.5 shrink-0" />
               Metro Manila
             </div>
@@ -391,7 +391,7 @@ export default function AddressVerification({
           Verify My Address
         </Button>
 
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-white/40">
           Your address is verified against the official list of Makati City barangays.
           All information is kept confidential in accordance with R.A. 10173.
         </p>

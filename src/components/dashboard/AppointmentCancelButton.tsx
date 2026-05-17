@@ -26,9 +26,9 @@ export default function AppointmentCancelButton({ appointmentId }: { appointment
 
   return (
     <div>
-      {error && <p className="text-xs text-red-600 mb-1">{error}</p>}
+      {error && <p className="text-xs text-red-400 mb-1">{error}</p>}
       <button disabled={busy} onClick={handleCancel}
-        className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-600 hover:text-red-800 disabled:opacity-50">
+        className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-400 hover:text-red-300 disabled:opacity-50">
         {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : null}
         Cancel appointment
       </button>
