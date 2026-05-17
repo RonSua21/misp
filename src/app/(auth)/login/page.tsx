@@ -49,42 +49,45 @@ export default async function LoginPage({
 
       <div className="flex min-h-[calc(100vh-32px)]">
         {/* Left panel */}
-        <div className="hidden lg:flex flex-col justify-between w-[45%] p-12">
-          <div>
+        <div className="hidden lg:flex flex-col justify-between w-[45%] p-12 relative">
+          {/* Subtle gradient backing so text reads against the photo */}
+          <div className="absolute inset-0 bg-gradient-to-br from-makati-blue/50 via-makati-blue/20 to-transparent pointer-events-none" />
+
+          <div className="relative">
             <Link href="/" className="flex items-center gap-3 mb-10">
-              <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold text-lg">M</span>
               </div>
               <div>
-                <p className="text-white font-bold leading-tight">MSWD Makati</p>
-                <p className="text-white/50 text-xs">Integrated Services Portal</p>
+                <p className="text-white font-bold leading-tight tracking-wide">MSWD Makati</p>
+                <p className="text-white/60 text-xs tracking-widest uppercase">Integrated Services Portal</p>
               </div>
             </Link>
 
-            <div className="inline-block bg-makati-gold/20 text-makati-gold text-xs font-bold px-3 py-1.5 rounded-full border border-makati-gold/30 mb-6">
+            <div className="inline-block bg-makati-gold/25 text-makati-gold text-xs font-bold px-3 py-1.5 rounded-full border border-makati-gold/40 mb-6 shadow-sm">
               Resident Portal
             </div>
-            <h2 className="text-4xl font-extrabold text-white leading-snug mb-4">
+            <h2 className="text-5xl font-extrabold text-white leading-snug mb-4 drop-shadow-md">
               Access Your<br />
-              <span className="text-makati-gold">Benefit Programs</span>
+              <span className="text-makati-gold drop-shadow-sm">Benefit Programs</span>
             </h2>
-            <p className="text-white/60 text-sm leading-relaxed mb-8 border-l-2 border-makati-gold/40 pl-4">
+            <p className="text-white/80 text-sm leading-relaxed mb-8 border-l-2 border-makati-gold/60 pl-4">
               Manage your applications for financial, medical, senior citizen, and
               PWD assistance — all in one secure government portal.
             </p>
             <div className="space-y-3">
               {features.map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-3 bg-white/5 backdrop-blur rounded-2xl px-4 py-3 border border-white/10">
-                  <div className="w-8 h-8 rounded-full bg-makati-gold/20 flex items-center justify-center shrink-0">
+                <div key={text} className="flex items-center gap-3 bg-white/10 backdrop-blur-md rounded-2xl px-4 py-3 border border-white/20 shadow-sm">
+                  <div className="w-8 h-8 rounded-full bg-makati-gold/25 flex items-center justify-center shrink-0 border border-makati-gold/20">
                     <Icon className="w-4 h-4 text-makati-gold" />
                   </div>
-                  <span className="text-white/70 text-sm">{text}</span>
+                  <span className="text-white/90 text-sm font-medium">{text}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <p className="text-white/30 text-xs">
+          <p className="relative text-white/40 text-xs">
             © {new Date().getFullYear()} MSWD Makati — R.A. 10173 Compliant
           </p>
         </div>
