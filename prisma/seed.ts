@@ -16,6 +16,12 @@ function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function randomDate(startYear: number, endYear: number, startMonth = 0, endDate?: Date): Date {
+  const start = new Date(startYear, startMonth, 1).getTime();
+  const end = (endDate ?? new Date(endYear, 11, 31, 23, 59, 59)).getTime();
+  return new Date(start + Math.random() * (end - start));
+}
+
 const PROGRAMS = [
   { name: "Emergency Financial Assistance", category: "FINANCIAL_ASSISTANCE" as const, description: "Emergency cash assistance for Makati City residents facing economic hardship due to calamity, job loss, or other crises.", requirements: ["Valid Government-Issued ID", "Proof of Residency (Barangay Certificate)", "Income Certificate or Sworn Affidavit", "Application Letter"], maxAmount: 5000, isActive: true },
   { name: "Livelihood Assistance Program", category: "FINANCIAL_ASSISTANCE" as const, description: "Financial support for small business startup or expansion for qualified low-income Makati residents.", requirements: ["Valid Government-Issued ID", "Proof of Residency", "Business Plan", "Barangay Clearance"], maxAmount: 10000, isActive: true },
@@ -101,7 +107,8 @@ async function main() {
       city: "Makati City",
       residencyVerified: true,
       consentGiven: true,
-      consentDate: new Date("2024-01-01"),
+      consentDate: new Date("2024-01-15T08:30:00"),
+      createdAt: new Date("2024-01-15T08:30:00"),
     },
   });
   console.log(`  Super Admin: ${superAdmin.firstName} ${superAdmin.lastName}`);
@@ -127,7 +134,8 @@ async function main() {
         city: "Makati City",
         residencyVerified: true,
         consentGiven: true,
-        consentDate: new Date("2024-01-01"),
+        consentDate: randomDate(2023, 2024),
+        createdAt: randomDate(2023, 2024),
       },
     });
     staffUsers.push(staff);
@@ -157,7 +165,8 @@ async function main() {
         longitude: 121.01 + Math.random() * 0.05,
         residencyVerified: i < 14,
         consentGiven: true,
-        consentDate: new Date(2024, randomInt(0, 11), randomInt(1, 28)),
+        consentDate: randomDate(2023, 2025),
+        createdAt: randomDate(2023, 2025),
       },
     });
     clients.push(client);
@@ -183,10 +192,10 @@ async function main() {
     const program = pick(programs);
     const status = statuses[i];
     const staffUser = pick(staffUsers);
-    const createdAt = new Date(2024, randomInt(0, 11), randomInt(1, 28));
-    const reviewedAt = new Date(createdAt.getTime() + 86400000 * randomInt(1, 5));
-    const approvedAt = new Date(createdAt.getTime() + 86400000 * randomInt(3, 10));
-    const disbursedAt = new Date(createdAt.getTime() + 86400000 * randomInt(10, 20));
+    const createdAt = randomDate(2026, 2026, 2, new Date());
+    const reviewedAt = new Date(createdAt.getTime() + 86400000 * randomInt(1, 5) + randomInt(0, 3600000));
+    const approvedAt = new Date(createdAt.getTime() + 86400000 * randomInt(3, 10) + randomInt(0, 3600000));
+    const disbursedAt = new Date(createdAt.getTime() + 86400000 * randomInt(10, 20) + randomInt(0, 3600000));
 
     const app = await prisma.application.create({
       data: {
@@ -300,7 +309,7 @@ async function main() {
         title: a.title,
         content: a.content,
         isPublished: true,
-        publishedAt: new Date(2024, randomInt(0, 11), randomInt(1, 28)),
+        publishedAt: randomDate(2024, 2025),
         createdBy: superAdmin.id,
       },
     });
