@@ -12,9 +12,113 @@ const navLinks = [
   { label: "About",         href: "/#about" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ glass = false }: { glass?: boolean }) {
   const [open, setOpen] = useState(false);
   const { theme, toggle } = useTheme();
+
+  if (glass) {
+    return (
+      <header className="sticky top-0 z-50 transition-colors duration-300">
+        {/* Top government strip */}
+        <div className="bg-makati-blue/80 backdrop-blur-sm border-b border-white/10 text-white text-xs py-1.5 px-4 text-center tracking-wide">
+          Republic of the Philippines &nbsp;·&nbsp; City of Makati &nbsp;·&nbsp; Official Portal of the Social Welfare and Development Department
+        </div>
+
+        <nav className="bg-white/10 backdrop-blur-2xl border-b border-white/10 container-max flex items-center justify-between h-16 px-4">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3 shrink-0">
+            <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center border border-white/30">
+              <span className="text-white font-bold text-sm">M</span>
+            </div>
+            <div className="hidden sm:block">
+              <p className="font-bold text-white text-sm leading-tight">MSWD</p>
+              <p className="text-xs text-white/60 leading-tight">Integrated Services Portal</p>
+            </div>
+          </Link>
+
+          {/* Desktop nav */}
+          <ul className="hidden lg:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="px-3 py-2 text-sm font-medium text-white/80 rounded-lg hover:bg-white/10 hover:text-white transition-colors"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* Desktop CTA + theme toggle */}
+          <div className="hidden lg:flex items-center gap-2">
+            <button
+              onClick={toggle}
+              title={theme === "dark" ? "Light mode" : "Dark mode"}
+              className="p-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-colors"
+            >
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+            <Link href="/login" className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white/80 border border-white/20 hover:bg-white/10 hover:text-white transition-colors">
+              <LogIn className="w-4 h-4" />
+              Login
+            </Link>
+            <Link href="/register" className="inline-flex items-center gap-1.5 bg-makati-gold text-makati-blue font-bold px-4 py-2 rounded-xl text-sm hover:bg-yellow-400 transition-colors">
+              <UserPlus className="w-4 h-4" />
+              Register
+            </Link>
+          </div>
+
+          {/* Mobile: theme toggle + hamburger */}
+          <div className="lg:hidden flex items-center gap-1">
+            <button
+              onClick={toggle}
+              className="p-2 rounded-lg text-white/70 hover:bg-white/10 transition-colors"
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+            <button
+              onClick={() => setOpen(!open)}
+              className="p-2 rounded-lg text-white/70 hover:bg-white/10 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+        </nav>
+
+        {/* Mobile drawer */}
+        {open && (
+          <div className="lg:hidden bg-makati-blue/90 backdrop-blur-2xl border-t border-white/10 px-4 pb-4">
+            <ul className="mt-2 space-y-1">
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="block px-3 py-2 text-sm font-medium text-white/80 rounded-lg hover:bg-white/10 hover:text-white transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-4 flex flex-col gap-2">
+              <Link href="/login" onClick={() => setOpen(false)} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white border border-white/20 hover:bg-white/10 transition-colors">
+                <LogIn className="w-4 h-4" />
+                Login
+              </Link>
+              <Link href="/register" onClick={() => setOpen(false)} className="inline-flex items-center justify-center gap-2 bg-makati-gold text-makati-blue font-bold px-4 py-2.5 rounded-xl text-sm hover:bg-yellow-400 transition-colors">
+                <UserPlus className="w-4 h-4" />
+                Register
+              </Link>
+            </div>
+          </div>
+        )}
+      </header>
+    );
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 shadow-sm transition-colors duration-300">

@@ -15,11 +15,11 @@ const SERVICE_LABELS: Record<string, string> = {
 };
 
 const STATUS_STYLES: Record<string, string> = {
-  PENDING:   "bg-yellow-100 text-yellow-800",
-  CONFIRMED: "bg-blue-100 text-blue-800",
-  COMPLETED: "bg-green-100 text-green-800",
-  CANCELLED: "bg-gray-100 text-gray-600",
-  NO_SHOW:   "bg-red-100 text-red-700",
+  PENDING:   "bg-yellow-400/20 text-yellow-300 border border-yellow-400/30",
+  CONFIRMED: "bg-blue-400/20 text-blue-300 border border-blue-400/30",
+  COMPLETED: "bg-green-400/20 text-green-300 border border-green-400/30",
+  CANCELLED: "bg-white/10 text-white/50 border border-white/20",
+  NO_SHOW:   "bg-red-400/20 text-red-300 border border-red-400/30",
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -57,30 +57,30 @@ export default async function AppointmentsPage() {
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white">My Appointments</h1>
-          <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Book and manage MSWD office appointments</p>
+          <h1 className="text-xl font-bold text-white">My Appointments</h1>
+          <p className="text-sm text-white/60 mt-0.5">Book and manage MSWD office appointments</p>
         </div>
         <Link href="/dashboard/appointments/new"
-          className="inline-flex items-center gap-2 bg-makati-blue text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-blue-800 active:scale-95 transition-all">
+          className="btn-primary text-sm">
           <Plus className="w-4 h-4" /> Book Appointment
         </Link>
       </div>
 
       {(!appointments || appointments.length === 0) && (
         <div className="text-center py-16 space-y-3">
-          <CalendarDays className="w-10 h-10 text-gray-300 dark:text-slate-600 mx-auto" />
-          <p className="text-gray-500 dark:text-slate-400 font-medium">No upcoming appointments</p>
-          <p className="text-sm text-gray-400 dark:text-slate-500">Click "Book Appointment" to schedule a visit.</p>
+          <CalendarDays className="w-10 h-10 text-white/30 mx-auto" />
+          <p className="text-white/60 font-medium">No upcoming appointments</p>
+          <p className="text-sm text-white/50">Click "Book Appointment" to schedule a visit.</p>
         </div>
       )}
 
       <div className="space-y-3">
         {(appointments ?? []).map(a => (
-          <div key={a.id} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-4 space-y-2">
+          <div key={a.id} className="bg-white dark:bg-slate-800 rounded-xl border border-white/15 p-4 space-y-2">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <p className="font-semibold text-gray-800 dark:text-white text-sm">{SERVICE_LABELS[a.serviceType] ?? a.serviceType}</p>
-                <p className="text-xs text-gray-500 dark:text-slate-400">
+                <p className="font-semibold text-white text-sm">{SERVICE_LABELS[a.serviceType] ?? a.serviceType}</p>
+                <p className="text-xs text-white/60">
                   {new Date(a.preferredDate + "T00:00:00").toLocaleDateString("en-PH", { weekday: "long", month: "long", day: "numeric", year: "numeric" })} · {formatTime(a.preferredTime)}
                 </p>
               </div>
@@ -88,9 +88,9 @@ export default async function AppointmentsPage() {
                 {STATUS_LABELS[a.status] ?? a.status}
               </span>
             </div>
-            {a.notes && <p className="text-sm text-gray-600 dark:text-slate-300">{a.notes}</p>}
+            {a.notes && <p className="text-sm text-white/70">{a.notes}</p>}
             {a.status === "CONFIRMED" && (
-              <p className="text-sm text-blue-700 bg-blue-50 dark:bg-blue-900/20 rounded-lg px-3 py-2">
+              <p className="text-sm text-blue-300 bg-blue-400/10 border border-blue-400/20 rounded-xl px-3 py-2">
                 Your appointment is confirmed. Please arrive on time at the MSWD office.
               </p>
             )}
@@ -103,3 +103,4 @@ export default async function AppointmentsPage() {
     </div>
   );
 }
+

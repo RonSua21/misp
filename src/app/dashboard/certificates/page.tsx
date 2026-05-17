@@ -15,11 +15,11 @@ const CERT_LABELS: Record<string, string> = {
 };
 
 const STATUS_STYLES: Record<string, string> = {
-  PENDING:      "bg-yellow-100 text-yellow-800",
-  UNDER_REVIEW: "bg-blue-100 text-blue-800",
-  APPROVED:     "bg-green-100 text-green-800",
-  RELEASED:     "bg-emerald-100 text-emerald-800",
-  REJECTED:     "bg-red-100 text-red-700",
+  PENDING:      "bg-yellow-400/20 text-yellow-300 border border-yellow-400/30",
+  UNDER_REVIEW: "bg-blue-400/20 text-blue-300 border border-blue-400/30",
+  APPROVED:     "bg-green-400/20 text-green-300 border border-green-400/30",
+  RELEASED:     "bg-emerald-400/20 text-emerald-300 border border-emerald-400/30",
+  REJECTED:     "bg-red-400/20 text-red-300 border border-red-400/30",
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -49,53 +49,53 @@ export default async function CertificatesPage() {
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white">My Certificates</h1>
-          <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Request and track MSWD certificates</p>
+          <h1 className="text-xl font-bold text-white">My Certificates</h1>
+          <p className="text-sm text-white/60 mt-0.5">Request and track MSWD certificates</p>
         </div>
-        <Link href="/dashboard/certificates/new"
-          className="inline-flex items-center gap-2 bg-makati-blue text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-blue-800 active:scale-95 transition-all">
+        <Link href="/dashboard/certificates/new" className="btn-primary text-sm">
           <Plus className="w-4 h-4" /> Request Certificate
         </Link>
       </div>
 
       {(!requests || requests.length === 0) && (
         <div className="text-center py-16 space-y-3">
-          <FileText className="w-10 h-10 text-gray-300 dark:text-slate-600 mx-auto" />
-          <p className="text-gray-500 dark:text-slate-400 font-medium">No certificate requests yet</p>
-          <p className="text-sm text-gray-400 dark:text-slate-500">Click "Request Certificate" to get started.</p>
+          <FileText className="w-10 h-10 text-white/30 mx-auto" />
+          <p className="text-white/60 font-medium">No certificate requests yet</p>
+          <p className="text-sm text-white/50">Click "Request Certificate" to get started.</p>
         </div>
       )}
 
       <div className="space-y-3">
         {(requests ?? []).map(r => (
-          <div key={r.id} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-4 space-y-2">
+          <div key={r.id} className="card p-4 space-y-2">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <p className="font-semibold text-gray-800 dark:text-white text-sm">{CERT_LABELS[r.type] ?? r.type}</p>
-                <p className="text-xs text-gray-500 dark:text-slate-400 font-mono">{r.referenceNumber}</p>
+                <p className="font-semibold text-white text-sm">{CERT_LABELS[r.type] ?? r.type}</p>
+                <p className="text-xs text-white/60 font-mono">{r.referenceNumber}</p>
               </div>
               <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold shrink-0 ${STATUS_STYLES[r.status] ?? "bg-gray-100 text-gray-600"}`}>
                 {STATUS_LABELS[r.status] ?? r.status}
               </span>
             </div>
-            <p className="text-sm text-gray-600 dark:text-slate-300">{r.purpose}</p>
+            <p className="text-sm text-white/70">{r.purpose}</p>
             {r.remarks && r.status === "REJECTED" && (
-              <p className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 rounded-lg px-3 py-2">
+              <p className="text-sm text-red-300 bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
                 Reason: {r.remarks}
               </p>
             )}
             {r.status === "APPROVED" && (
-              <p className="text-sm text-green-700 bg-green-50 dark:bg-green-900/20 rounded-lg px-3 py-2">
+              <p className="text-sm text-green-300 bg-green-400/10 border border-green-400/20 rounded-lg px-3 py-2">
                 Your certificate is approved. Please visit the MSWD office to claim it.
               </p>
             )}
             {r.status === "RELEASED" && r.releasedAt && (
-              <p className="text-xs text-gray-500 dark:text-slate-400">Released on {new Date(r.releasedAt).toLocaleDateString()}</p>
+              <p className="text-xs text-white/60">Released on {new Date(r.releasedAt).toLocaleDateString()}</p>
             )}
-            <p className="text-xs text-gray-400 dark:text-slate-500">Requested {new Date(r.requestedAt).toLocaleDateString()}</p>
+            <p className="text-xs text-white/50">Requested {new Date(r.requestedAt).toLocaleDateString()}</p>
           </div>
         ))}
       </div>
     </div>
   );
 }
+

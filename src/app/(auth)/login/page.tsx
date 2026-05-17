@@ -16,91 +16,107 @@ const SUCCESS_MESSAGES: Record<string, string> = {
   "reset-success": "Password updated successfully. Please sign in with your new password.",
 };
 
+const features = [
+  { icon: FileText,    text: "View and track all your applications" },
+  { icon: ShieldCheck, text: "Secured under R.A. 10173 — Data Privacy Act" },
+  { icon: Bell,        text: "Receive real-time status notifications" },
+  { icon: MapPin,      text: "GIS-verified Makati residency" },
+];
+
 export default async function LoginPage({
   searchParams,
 }: {
   searchParams: Promise<{ error?: string; reset?: string }>;
 }) {
   const { error, reset } = await searchParams;
-  const errorMessage = error ? ERROR_MESSAGES[error] : null;
+  const errorMessage   = error ? ERROR_MESSAGES[error] : null;
   const successMessage = reset ? SUCCESS_MESSAGES[`${reset}-success`] : null;
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
-      {/* Top government banner */}
-      <div className="bg-makati-blue border-b-4 border-makati-gold w-full">
-        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center gap-4">
-          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0">
-            <span className="font-extrabold text-makati-blue text-base">M</span>
-          </div>
-          <div>
-            <p className="text-white font-bold text-sm leading-tight">Republic of the Philippines</p>
-            <p className="text-blue-200 text-xs">City of Makati — Social Welfare and Development Department</p>
-          </div>
-        </div>
+    <div className="min-h-screen">
+      {/* Fixed glass background */}
+      <div className="fixed inset-0 -z-10">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/makati-hall.jpg" alt="" aria-hidden className="w-full h-full object-cover object-center" />
+        <div className="absolute inset-0 bg-makati-blue/70" />
+        <div className="absolute inset-0 backdrop-blur-sm" />
       </div>
 
-      <div className="flex flex-1">
+      {/* Top government strip */}
+      <div className="bg-makati-blue/80 backdrop-blur-sm border-b border-white/10 text-white text-xs py-1.5 px-4 text-center tracking-wide">
+        Republic of the Philippines &nbsp;·&nbsp; City of Makati &nbsp;·&nbsp; Official Portal of the Social Welfare and Development Department
+      </div>
+
+      <div className="flex min-h-[calc(100vh-32px)]">
         {/* Left panel */}
-        <div className="hidden lg:flex flex-col justify-between bg-makati-blue text-white w-[42%] p-12">
+        <div className="hidden lg:flex flex-col justify-between w-[45%] p-12">
           <div>
-            <div className="inline-block bg-makati-gold text-makati-blue text-xs font-bold px-3 py-1 rounded mb-6 tracking-wide uppercase">
+            <Link href="/" className="flex items-center gap-3 mb-10">
+              <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center">
+                <span className="text-white font-bold text-lg">M</span>
+              </div>
+              <div>
+                <p className="text-white font-bold leading-tight">MSWD Makati</p>
+                <p className="text-white/50 text-xs">Integrated Services Portal</p>
+              </div>
+            </Link>
+
+            <div className="inline-block bg-makati-gold/20 text-makati-gold text-xs font-bold px-3 py-1.5 rounded-full border border-makati-gold/30 mb-6">
               Resident Portal
             </div>
-            <h2 className="text-3xl font-extrabold leading-snug mb-3">
+            <h2 className="text-4xl font-extrabold text-white leading-snug mb-4">
               Access Your<br />
               <span className="text-makati-gold">Benefit Programs</span>
             </h2>
-            <p className="text-blue-200 text-sm leading-relaxed mb-8 border-l-2 border-makati-gold pl-4">
+            <p className="text-white/60 text-sm leading-relaxed mb-8 border-l-2 border-makati-gold/40 pl-4">
               Manage your applications for financial, medical, senior citizen, and
               PWD assistance — all in one secure government portal.
             </p>
-            <div className="space-y-4">
-              {[
-                { icon: FileText, text: "View and track all your applications" },
-                { icon: ShieldCheck, text: "Secured under R.A. 10173 — Data Privacy Act" },
-                { icon: Bell, text: "Receive real-time status notifications" },
-                { icon: MapPin, text: "GIS-verified Makati residency" },
-              ].map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded bg-white/10 flex items-center justify-center shrink-0">
+            <div className="space-y-3">
+              {features.map(({ icon: Icon, text }) => (
+                <div key={text} className="flex items-center gap-3 bg-white/5 backdrop-blur rounded-2xl px-4 py-3 border border-white/10">
+                  <div className="w-8 h-8 rounded-full bg-makati-gold/20 flex items-center justify-center shrink-0">
                     <Icon className="w-4 h-4 text-makati-gold" />
                   </div>
-                  <span className="text-blue-100 text-sm leading-relaxed">{text}</span>
+                  <span className="text-white/70 text-sm">{text}</span>
                 </div>
               ))}
             </div>
           </div>
-          <div className="border-t border-white/10 pt-6">
-            <p className="text-blue-300 text-xs">© {new Date().getFullYear()} Makati Social Welfare and Development Department</p>
-            <p className="text-blue-400 text-xs mt-1">In accordance with R.A. 10173 — Data Privacy Act of 2012</p>
-          </div>
+
+          <p className="text-white/30 text-xs">
+            © {new Date().getFullYear()} MSWD Makati — R.A. 10173 Compliant
+          </p>
         </div>
 
-        {/* Right panel */}
+        {/* Right panel — glass card */}
         <div className="flex-1 flex items-center justify-center px-4 py-10">
           <div className="w-full max-w-md">
+            {/* Mobile logo */}
             <div className="lg:hidden text-center mb-6">
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Republic of the Philippines</p>
-              <p className="font-bold text-makati-blue">City of Makati — MSWD</p>
+              <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center mx-auto mb-3">
+                <span className="text-white font-bold text-xl">M</span>
+              </div>
+              <p className="text-white font-bold">MSWD Integrated Services Portal</p>
+              <p className="text-white/50 text-xs">City of Makati — Resident Portal</p>
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-              <div className="bg-makati-blue px-6 py-4 border-b-2 border-makati-gold">
-                <h1 className="text-white font-bold text-lg">Resident Sign In</h1>
-                <p className="text-blue-200 text-xs mt-0.5">MISP — MSWD Integrated Services Portal</p>
+            <div className="bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-2xl overflow-hidden">
+              <div className="px-6 pt-6 pb-4 border-b border-white/10">
+                <h1 className="text-white font-bold text-xl">Resident Sign In</h1>
+                <p className="text-white/50 text-xs mt-0.5">MISP — MSWD Integrated Services Portal</p>
               </div>
 
               <div className="px-6 py-6 space-y-4">
                 {successMessage && (
-                  <div className="flex items-start gap-2.5 p-3 bg-green-50 border border-green-200 rounded text-sm text-green-800">
-                    <CheckCircle className="w-4 h-4 shrink-0 mt-0.5 text-green-500" />
+                  <div className="flex items-start gap-2.5 p-3 bg-green-400/15 border border-green-400/25 rounded-xl text-sm text-green-300">
+                    <CheckCircle className="w-4 h-4 shrink-0 mt-0.5 text-green-400" />
                     {successMessage}
                   </div>
                 )}
                 {errorMessage && (
-                  <div className="flex items-start gap-2.5 p-3 bg-amber-50 border border-amber-200 rounded text-sm text-amber-800">
-                    <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" />
+                  <div className="flex items-start gap-2.5 p-3 bg-amber-400/15 border border-amber-400/25 rounded-xl text-sm text-amber-300">
+                    <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-400" />
                     {errorMessage}
                   </div>
                 )}
@@ -108,9 +124,9 @@ export default async function LoginPage({
               </div>
             </div>
 
-            <p className="mt-4 text-center text-xs text-gray-400">
+            <p className="mt-4 text-center text-xs text-white/40">
               For assistance, contact MSWD Makati at{" "}
-              <a href="tel:028869400" className="text-makati-blue font-medium hover:underline">
+              <a href="tel:028869400" className="text-makati-gold font-medium hover:text-yellow-400">
                 (02) 8869-4000
               </a>
             </p>

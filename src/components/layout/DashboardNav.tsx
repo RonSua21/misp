@@ -14,7 +14,6 @@ import {
   Sun,
   Moon,
   Settings,
-  ChevronRight,
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -37,7 +36,6 @@ export default function DashboardNav({ userEmail }: { userEmail: string }) {
   const { theme, toggle } = useTheme();
   const profileRef = useRef<HTMLDivElement>(null);
 
-  // Close profile popup on outside click
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
       if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
@@ -55,14 +53,18 @@ export default function DashboardNav({ userEmail }: { userEmail: string }) {
     router.refresh();
   }
 
+  function isActive(href: string) {
+    return pathname === href || (href !== "/dashboard" && pathname.startsWith(href + "/"));
+  }
+
   return (
     <>
       {/* ── Desktop top bar ───────────────────────────────── */}
-      <div className="hidden md:flex fixed top-0 left-16 right-0 z-30 h-14 bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 items-center justify-end px-6 gap-2 transition-colors duration-300">
+      <div className="hidden md:flex fixed top-0 left-16 right-0 z-30 h-14 bg-white/10 backdrop-blur-2xl border-b border-white/10 items-center justify-end px-6 gap-2">
         <button
           onClick={toggle}
           title={theme === "dark" ? "Light mode" : "Dark mode"}
-          className="p-2 rounded-lg text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-700 dark:hover:text-slate-200 transition-colors"
+          className="p-2 rounded-lg text-white/60 hover:bg-white/10 hover:text-white transition-colors"
         >
           {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </button>
@@ -73,22 +75,21 @@ export default function DashboardNav({ userEmail }: { userEmail: string }) {
       <aside className="
         fixed inset-y-0 left-0 z-40 hidden md:flex flex-col
         w-16 hover:w-56
-        bg-white dark:bg-slate-900
-        border-r border-gray-100 dark:border-slate-800
-        shadow-sm
+        bg-white/10 backdrop-blur-2xl
+        border-r border-white/10
         transition-[width] duration-300 ease-in-out
         overflow-hidden scrollbar-none
         group
       ">
         {/* Logo */}
-        <div className="flex items-center h-16 px-4 border-b border-gray-100 dark:border-slate-800 shrink-0">
+        <div className="flex items-center h-16 px-4 border-b border-white/10 shrink-0">
           <Link href="/dashboard" className="flex items-center gap-3 min-w-0">
-            <div className="w-8 h-8 rounded-full bg-makati-blue flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-full bg-white/20 border border-white/30 flex items-center justify-center shrink-0">
               <span className="text-white font-bold text-sm">M</span>
             </div>
             <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap overflow-hidden">
-              <p className="font-bold text-makati-blue text-sm leading-tight">MISP</p>
-              <p className="text-[10px] text-gray-400 dark:text-slate-500 leading-tight">Applicant Portal</p>
+              <p className="font-bold text-white text-sm leading-tight">MISP</p>
+              <p className="text-[10px] text-white/50 leading-tight">Applicant Portal</p>
             </div>
           </Link>
         </div>
@@ -96,18 +97,18 @@ export default function DashboardNav({ userEmail }: { userEmail: string }) {
         {/* Nav links */}
         <nav className="flex-1 overflow-y-hidden py-3 px-2 space-y-0.5">
           {navItems.map(({ href, label, icon: Icon }) => {
-            const active = pathname === href || (href !== "/dashboard" && pathname.startsWith(href + "/"));
+            const active = isActive(href);
             return (
               <Link
                 key={href}
                 href={href}
                 title={label}
                 className={`
-                  flex items-center gap-3 px-2 py-2.5 rounded-lg
+                  flex items-center gap-3 px-2 py-2.5 rounded-xl
                   transition-colors duration-150
                   ${active
-                    ? "bg-makati-blue-light dark:bg-blue-900/40 text-makati-blue dark:text-blue-400"
-                    : "text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-slate-100"
+                    ? "bg-white/20 text-white"
+                    : "text-white/60 hover:bg-white/10 hover:text-white"
                   }
                 `}
               >
@@ -121,53 +122,53 @@ export default function DashboardNav({ userEmail }: { userEmail: string }) {
         </nav>
 
         {/* Profile button at bottom */}
-        <div className="shrink-0 border-t border-gray-100 dark:border-slate-800 py-2 px-2">
+        <div className="shrink-0 border-t border-white/10 py-2 px-2">
           <button
             onClick={() => setProfileOpen(p => !p)}
             title="Account"
-            className="flex items-center gap-3 w-full px-2 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+            className="flex items-center gap-3 w-full px-2 py-2 rounded-xl hover:bg-white/10 transition-colors"
           >
-            <div className="w-8 h-8 rounded-full bg-makati-blue-light dark:bg-blue-900/40 flex items-center justify-center shrink-0">
-              <span className="text-makati-blue dark:text-blue-400 font-semibold text-xs">
+            <div className="w-8 h-8 rounded-full bg-white/20 border border-white/20 flex items-center justify-center shrink-0">
+              <span className="text-white font-semibold text-xs">
                 {userEmail.charAt(0).toUpperCase()}
               </span>
             </div>
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap text-xs text-gray-500 dark:text-slate-400 max-w-[140px] truncate">
+            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap text-xs text-white/50 max-w-[140px] truncate">
               {userEmail}
             </span>
           </button>
         </div>
       </aside>
 
-      {/* ── Profile popup (fixed to avoid sidebar overflow-hidden clipping) ── */}
+      {/* ── Profile popup ──────────────────────────────────── */}
       {profileOpen && (
-        <div ref={profileRef} className="hidden md:block fixed bottom-[68px] left-2 z-50 w-56 bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 shadow-xl py-1">
-          <div className="px-4 py-2.5 border-b border-gray-100 dark:border-slate-700">
-            <p className="text-xs font-semibold text-gray-900 dark:text-white truncate">
+        <div ref={profileRef} className="hidden md:block fixed bottom-[68px] left-2 z-50 w-56 bg-makati-blue/80 backdrop-blur-2xl rounded-2xl border border-white/15 shadow-2xl py-1">
+          <div className="px-4 py-2.5 border-b border-white/10">
+            <p className="text-xs font-semibold text-white truncate">
               {userEmail.split("@")[0]}
             </p>
-            <p className="text-[11px] text-gray-400 dark:text-slate-500 truncate">{userEmail}</p>
+            <p className="text-[11px] text-white/50 truncate">{userEmail}</p>
           </div>
           <Link
             href="/dashboard/profile"
             onClick={() => setProfileOpen(false)}
-            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700/60 transition-colors"
+            className="flex items-center gap-3 px-4 py-2.5 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-colors"
           >
-            <User className="w-4 h-4 shrink-0 text-gray-400 dark:text-slate-500" />
+            <User className="w-4 h-4 shrink-0 text-white/40" />
             Profile
           </Link>
           <Link
             href="/dashboard/settings"
             onClick={() => setProfileOpen(false)}
-            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700/60 transition-colors"
+            className="flex items-center gap-3 px-4 py-2.5 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-colors"
           >
-            <Settings className="w-4 h-4 shrink-0 text-gray-400 dark:text-slate-500" />
+            <Settings className="w-4 h-4 shrink-0 text-white/40" />
             Settings
           </Link>
-          <div className="border-t border-gray-100 dark:border-slate-700 mt-1 pt-1">
+          <div className="border-t border-white/10 mt-1 pt-1">
             <button
               onClick={() => { setProfileOpen(false); handleSignOut(); }}
-              className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+              className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-300 hover:bg-red-500/10 transition-colors"
             >
               <LogOut className="w-4 h-4 shrink-0" />
               Sign out
@@ -177,18 +178,18 @@ export default function DashboardNav({ userEmail }: { userEmail: string }) {
       )}
 
       {/* ── Mobile top bar ────────────────────────────────── */}
-      <div className="md:hidden fixed top-0 inset-x-0 z-40 h-14 bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between px-4 transition-colors duration-300">
+      <div className="md:hidden fixed top-0 inset-x-0 z-40 h-14 bg-white/10 backdrop-blur-2xl border-b border-white/10 flex items-center justify-between px-4">
         <Link href="/dashboard" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-makati-blue flex items-center justify-center">
+          <div className="w-8 h-8 rounded-full bg-white/20 border border-white/30 flex items-center justify-center">
             <span className="text-white font-bold text-sm">M</span>
           </div>
-          <p className="font-bold text-makati-blue text-sm">MISP</p>
+          <p className="font-bold text-white text-sm">MISP</p>
         </Link>
 
         <div className="flex items-center gap-1">
           <button
             onClick={toggle}
-            className="p-2 rounded-lg text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-lg text-white/60 hover:bg-white/10 hover:text-white transition-colors"
             aria-label="Toggle theme"
           >
             {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -196,7 +197,7 @@ export default function DashboardNav({ userEmail }: { userEmail: string }) {
           <NotificationBell />
           <button
             onClick={() => setMobileOpen(true)}
-            className="p-2 rounded-lg text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-lg text-white/60 hover:bg-white/10 hover:text-white transition-colors"
             aria-label="Open menu"
           >
             <Menu className="w-5 h-5" />
@@ -211,24 +212,24 @@ export default function DashboardNav({ userEmail }: { userEmail: string }) {
             className="md:hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="md:hidden fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-900 flex flex-col shadow-2xl transition-colors duration-300">
-            <div className="flex items-center justify-between h-14 px-4 border-b border-gray-100 dark:border-slate-800">
+          <div className="md:hidden fixed inset-y-0 left-0 z-50 w-64 bg-makati-blue/90 backdrop-blur-2xl flex flex-col shadow-2xl border-r border-white/10">
+            <div className="flex items-center justify-between h-14 px-4 border-b border-white/10">
               <Link
                 href="/dashboard"
                 className="flex items-center gap-2.5"
                 onClick={() => setMobileOpen(false)}
               >
-                <div className="w-8 h-8 rounded-full bg-makati-blue flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-white/20 border border-white/30 flex items-center justify-center">
                   <span className="text-white font-bold text-sm">M</span>
                 </div>
                 <div>
-                  <p className="font-bold text-makati-blue text-sm leading-tight">MISP</p>
-                  <p className="text-[10px] text-gray-400 dark:text-slate-500 leading-tight">Applicant Portal</p>
+                  <p className="font-bold text-white text-sm leading-tight">MISP</p>
+                  <p className="text-[10px] text-white/50 leading-tight">Applicant Portal</p>
                 </div>
               </Link>
               <button
                 onClick={() => setMobileOpen(false)}
-                className="p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+                className="p-1.5 rounded-lg text-white/50 hover:bg-white/10 hover:text-white transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -236,17 +237,17 @@ export default function DashboardNav({ userEmail }: { userEmail: string }) {
 
             <nav className="flex-1 overflow-y-auto py-3 px-3 space-y-0.5">
               {navItems.map(({ href, label, icon: Icon }) => {
-                const active = pathname === href || (href !== "/dashboard" && pathname.startsWith(href + "/"));
+                const active = isActive(href);
                 return (
                   <Link
                     key={href}
                     href={href}
                     onClick={() => setMobileOpen(false)}
                     className={`
-                      flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+                      flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors
                       ${active
-                        ? "bg-makati-blue-light dark:bg-blue-900/40 text-makati-blue dark:text-blue-400"
-                        : "text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800"
+                        ? "bg-white/20 text-white"
+                        : "text-white/60 hover:bg-white/10 hover:text-white"
                       }
                     `}
                   >
@@ -257,19 +258,19 @@ export default function DashboardNav({ userEmail }: { userEmail: string }) {
               })}
             </nav>
 
-            <div className="px-3 py-4 border-t border-gray-100 dark:border-slate-800 space-y-1">
-              <p className="px-3 py-1 text-xs text-gray-400 dark:text-slate-500 truncate">{userEmail}</p>
+            <div className="px-3 py-4 border-t border-white/10 space-y-1">
+              <p className="px-3 py-1 text-xs text-white/40 truncate">{userEmail}</p>
               <Link
                 href="/dashboard/profile"
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-white/60 hover:bg-white/10 hover:text-white transition-colors"
               >
                 <User className="w-5 h-5 shrink-0" />
                 Profile
               </Link>
               <button
                 onClick={handleSignOut}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-300 hover:bg-red-500/10 transition-colors"
               >
                 <LogOut className="w-5 h-5 shrink-0" />
                 Sign out

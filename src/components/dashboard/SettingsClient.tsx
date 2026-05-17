@@ -46,9 +46,9 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean
 
 function SectionHeader({ icon: Icon, title }: { icon: React.ElementType; title: string }) {
   return (
-    <div className="flex items-center gap-2 pb-3 border-b border-gray-100 dark:border-slate-700 mb-4">
+    <div className="flex items-center gap-2 pb-3 border-b border-white/10 mb-4">
       <Icon className="w-4 h-4 text-makati-blue" />
-      <h2 className="font-bold text-gray-900 dark:text-white">{title}</h2>
+      <h2 className="font-bold text-white">{title}</h2>
     </div>
   );
 }
@@ -116,16 +116,16 @@ export default function SettingsClient({ userEmail }: { userEmail: string }) {
         <SectionHeader icon={Sun} title="Appearance" />
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-900 dark:text-slate-100">Theme</p>
-            <p className="text-xs text-gray-400 dark:text-slate-500 mt-0.5">Choose how MISP looks for you</p>
+            <p className="text-sm font-medium text-white">Theme</p>
+            <p className="text-xs text-white/50 mt-0.5">Choose how MISP looks for you</p>
           </div>
-          <div className="flex items-center gap-1 bg-gray-100 dark:bg-slate-700 rounded-lg p-1">
+          <div className="flex items-center gap-1 bg-white/10 rounded-lg p-1">
             <button
               onClick={() => theme === "dark" && toggle()}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors
                 ${theme === "light"
-                  ? "bg-white dark:bg-slate-600 text-gray-900 dark:text-white shadow-sm"
-                  : "text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200"}`}
+                  ? "bg-white dark:bg-slate-600 text-white shadow-sm"
+                  : "text-white/60 hover:text-gray-700 dark:hover:text-slate-200"}`}
             >
               <Sun className="w-3.5 h-3.5" /> Light
             </button>
@@ -134,7 +134,7 @@ export default function SettingsClient({ userEmail }: { userEmail: string }) {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors
                 ${theme === "dark"
                   ? "bg-slate-600 text-white shadow-sm"
-                  : "text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200"}`}
+                  : "text-white/60 hover:text-gray-700 dark:hover:text-slate-200"}`}
             >
               <Moon className="w-3.5 h-3.5" /> Dark
             </button>
@@ -154,8 +154,8 @@ export default function SettingsClient({ userEmail }: { userEmail: string }) {
           ] as const).map(({ key, label, desc }) => (
             <div key={key} className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-slate-100">{label}</p>
-                <p className="text-xs text-gray-400 dark:text-slate-500 mt-0.5">{desc}</p>
+                <p className="text-sm font-medium text-white">{label}</p>
+                <p className="text-xs text-white/50 mt-0.5">{desc}</p>
               </div>
               <Toggle
                 checked={settings.notifications[key]}
@@ -180,16 +180,16 @@ export default function SettingsClient({ userEmail }: { userEmail: string }) {
               className={`flex flex-col items-start px-4 py-3 rounded-lg border-2 transition-colors text-left
                 ${settings.language === value
                   ? "border-makati-blue bg-makati-blue-light dark:bg-blue-900/30"
-                  : "border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50"}`}
+                  : "border-gray-200 dark:border-slate-700 hover:bg-white/10"}`}
             >
-              <p className={`text-sm font-semibold ${settings.language === value ? "text-makati-blue dark:text-blue-400" : "text-gray-700 dark:text-slate-300"}`}>
+              <p className={`text-sm font-semibold ${settings.language === value ? "text-makati-blue dark:text-blue-400" : "text-white/80"}`}>
                 {label}
               </p>
-              <p className="text-xs text-gray-400 dark:text-slate-500">{sub}</p>
+              <p className="text-xs text-white/50">{sub}</p>
             </button>
           ))}
         </div>
-        <p className="text-xs text-gray-400 dark:text-slate-500 mt-3">
+        <p className="text-xs text-white/50 mt-3">
           Full Filipino translation is coming soon.
         </p>
       </div>
@@ -197,7 +197,7 @@ export default function SettingsClient({ userEmail }: { userEmail: string }) {
       {/* ── Account Security ────────────────────────── */}
       <div className="card p-6">
         <SectionHeader icon={ShieldCheck} title="Account Security" />
-        <p className="text-xs text-gray-400 dark:text-slate-500 mb-4">
+        <p className="text-xs text-white/50 mb-4">
           Signed in as <span className="font-medium text-gray-600 dark:text-slate-400">{userEmail}</span>
         </p>
         <form onSubmit={handlePasswordChange} className="space-y-3">
@@ -267,3 +267,4 @@ export default function SettingsClient({ userEmail }: { userEmail: string }) {
     </div>
   );
 }
+

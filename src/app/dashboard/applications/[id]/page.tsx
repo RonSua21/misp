@@ -111,14 +111,14 @@ export default async function ApplicationDetailPage({
       <div>
         <Link
           href="/dashboard/applications"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-slate-400 hover:text-makati-blue transition-colors mb-4"
+          className="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-makati-blue transition-colors mb-4"
         >
           <ArrowLeft className="w-4 h-4" /> Back to My Applications
         </Link>
 
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">Application Details</h1>
+            <h1 className="text-2xl font-extrabold text-white">Application Details</h1>
             <p className="font-mono text-sm text-makati-blue mt-0.5 flex items-center gap-1">
               <Hash className="w-3.5 h-3.5" />{app.referenceNumber}
             </p>
@@ -130,7 +130,7 @@ export default async function ApplicationDetailPage({
       {/* Progress Tracker */}
       {!isRejected ? (
         <div className="card p-6">
-          <p className="text-xs font-semibold text-gray-400 dark:text-slate-500 uppercase tracking-wide mb-5">
+          <p className="text-xs font-semibold text-white/50 uppercase tracking-wide mb-5">
             Approval Progress
           </p>
           <div className="flex items-center gap-0">
@@ -143,18 +143,18 @@ export default async function ApplicationDetailPage({
                     <div className={`w-9 h-9 rounded-full flex items-center justify-center border-2 transition-colors
                       ${done   ? "bg-makati-blue border-makati-blue text-white"
                       : active ? "bg-white border-makati-blue text-makati-blue"
-                               : "bg-gray-100 dark:bg-slate-700 border-gray-200 dark:border-slate-600 text-gray-300 dark:text-slate-500"}`}
+                               : "bg-white/10 border-white/20 text-white/30"}`}
                     >
                       <step.icon className="w-4 h-4" />
                     </div>
                     <span className={`text-[10px] font-semibold text-center leading-tight w-16
-                      ${done || active ? "text-makati-blue dark:text-blue-400" : "text-gray-400 dark:text-slate-500"}`}
+                      ${done || active ? "text-makati-gold" : "text-white/40"}`}
                     >
                       {step.label}
                     </span>
                   </div>
                   {i < APPROVAL_STEPS.length - 1 && (
-                    <div className={`flex-1 h-0.5 mx-1 mb-5 ${done ? "bg-makati-blue dark:bg-blue-500" : "bg-gray-200 dark:bg-slate-700"}`} />
+                    <div className={`flex-1 h-0.5 mx-1 mb-5 ${done ? "bg-makati-gold" : "bg-white/20"}`} />
                   )}
                 </div>
               );
@@ -168,12 +168,12 @@ export default async function ApplicationDetailPage({
           )}
         </div>
       ) : (
-        <div className="card p-5 border-l-4 border-red-500 bg-red-50">
+        <div className="card p-5 border-l-4 border-red-400/60 bg-red-400/10">
           <div className="flex items-start gap-3">
-            <XCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+            <XCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
             <div>
-              <p className="font-bold text-red-800">Application Not Approved</p>
-              <p className="text-sm text-red-700 mt-0.5">{rejectionMessage}</p>
+              <p className="font-bold text-red-300">Application Not Approved</p>
+              <p className="text-sm text-red-300/80 mt-0.5">{rejectionMessage}</p>
             </div>
           </div>
         </div>
@@ -183,32 +183,32 @@ export default async function ApplicationDetailPage({
 
         {/* Application Info */}
         <div className="card p-6 space-y-4">
-          <h2 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <h2 className="font-bold text-white flex items-center gap-2">
             <FileText className="w-4 h-4 text-makati-blue" /> Application Info
           </h2>
           <div className="space-y-3 text-sm">
             <div className="flex justify-between gap-2">
-              <span className="text-gray-400 dark:text-slate-500">Program</span>
+              <span className="text-white/50">Program</span>
               <span className="font-semibold text-gray-900 dark:text-slate-100 text-right">{program?.name ?? "—"}</span>
             </div>
             <div className="flex justify-between gap-2">
-              <span className="text-gray-400 dark:text-slate-500">Category</span>
-              <span className="text-gray-700 dark:text-slate-300 text-right">
+              <span className="text-white/50">Category</span>
+              <span className="text-white/80 text-right">
                 {program?.category ? CATEGORY_LABELS[program.category as BenefitCategory] : "—"}
               </span>
             </div>
             <div className="flex justify-between gap-2">
-              <span className="text-gray-400 dark:text-slate-500">Date Submitted</span>
-              <span className="text-gray-700 dark:text-slate-300 flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-gray-400 dark:text-slate-500" />
+              <span className="text-white/50">Date Submitted</span>
+              <span className="text-white/80 flex items-center gap-1">
+                <Calendar className="w-3.5 h-3.5 text-white/50" />
                 {new Date(app.createdAt).toLocaleDateString("en-PH", {
                   year: "numeric", month: "long", day: "numeric",
                 })}
               </span>
             </div>
             <div className="flex justify-between gap-2">
-              <span className="text-gray-400 dark:text-slate-500">Last Updated</span>
-              <span className="text-gray-700 dark:text-slate-300">
+              <span className="text-white/50">Last Updated</span>
+              <span className="text-white/80">
                 {new Date(app.updatedAt).toLocaleDateString("en-PH", {
                   year: "numeric", month: "long", day: "numeric",
                 })}
@@ -227,20 +227,20 @@ export default async function ApplicationDetailPage({
 
         {/* Purpose + Remarks */}
         <div className="card p-6 space-y-4">
-          <h2 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <h2 className="font-bold text-white flex items-center gap-2">
             <MessageSquare className="w-4 h-4 text-makati-blue" /> Purpose & Remarks
           </h2>
           <div>
-            <p className="text-xs text-gray-400 dark:text-slate-500 uppercase tracking-wide font-semibold mb-1.5">
+            <p className="text-xs text-white/50 uppercase tracking-wide font-semibold mb-1.5">
               Your stated purpose
             </p>
-            <p className="text-sm text-gray-700 dark:text-slate-300 bg-gray-50 dark:bg-slate-700/50 rounded-lg p-3 leading-relaxed">
+            <p className="text-sm text-white/80 bg-gray-50 dark:bg-slate-700/50 rounded-lg p-3 leading-relaxed">
               {app.purpose}
             </p>
           </div>
           {app.remarks ? (
             <div>
-              <p className="text-xs text-gray-400 dark:text-slate-500 uppercase tracking-wide font-semibold mb-1.5">
+              <p className="text-xs text-white/50 uppercase tracking-wide font-semibold mb-1.5">
                 Staff remarks
               </p>
               <div className="flex gap-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-100 dark:border-yellow-800 rounded-lg p-3">
@@ -249,18 +249,18 @@ export default async function ApplicationDetailPage({
               </div>
             </div>
           ) : (
-            <p className="text-sm text-gray-400 dark:text-slate-500 italic">No remarks from staff yet.</p>
+            <p className="text-sm text-white/50 italic">No remarks from staff yet.</p>
           )}
         </div>
       </div>
 
       {/* Submitted Documents */}
       <div className="card p-6">
-        <h2 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <h2 className="font-bold text-white mb-4 flex items-center gap-2">
           <FileText className="w-4 h-4 text-makati-blue" /> Submitted Documents
         </h2>
         {!documents || documents.length === 0 ? (
-          <p className="text-sm text-gray-400 dark:text-slate-500">No documents attached to this application.</p>
+          <p className="text-sm text-white/50">No documents attached to this application.</p>
         ) : (
           <div className="space-y-2">
             {documents.map((doc) => (
@@ -269,7 +269,7 @@ export default async function ApplicationDetailPage({
                   <p className="text-sm font-medium text-gray-900 dark:text-slate-100">
                     {doc.type.replace(/_/g, " ")}
                   </p>
-                  <p className="text-xs text-gray-400 dark:text-slate-500 mt-0.5">
+                  <p className="text-xs text-white/50 mt-0.5">
                     {doc.fileName} · {(doc.fileSize / 1024).toFixed(0)} KB
                   </p>
                 </div>
@@ -299,7 +299,7 @@ export default async function ApplicationDetailPage({
       {/* Status History */}
       {history && history.length > 0 && (
         <div className="card p-6">
-          <h2 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <h2 className="font-bold text-white mb-4 flex items-center gap-2">
             <Clock className="w-4 h-4 text-makati-blue" /> Status History
           </h2>
           <ol className="space-y-3">
@@ -320,7 +320,7 @@ export default async function ApplicationDetailPage({
                       : (entry.toStatus as string).replace(/_/g, " ")
                     }
                     {entry.approvalLevel != null && (
-                      <span className="ml-2 text-xs text-gray-400 dark:text-slate-500 font-normal">(Level {entry.approvalLevel})</span>
+                      <span className="ml-2 text-xs text-white/50 font-normal">(Level {entry.approvalLevel})</span>
                     )}
                   </p>
                   {entry.rejectionCode && (
@@ -329,9 +329,9 @@ export default async function ApplicationDetailPage({
                     </p>
                   )}
                   {entry.remarks && (
-                    <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">&quot;{entry.remarks}&quot;</p>
+                    <p className="text-xs text-white/60 mt-0.5">&quot;{entry.remarks}&quot;</p>
                   )}
-                  <p className="text-[11px] text-gray-400 dark:text-slate-500 mt-1">
+                  <p className="text-[11px] text-white/50 mt-1">
                     {new Date(entry.changedAt).toLocaleDateString("en-PH", {
                       month: "long", day: "numeric", year: "numeric",
                     })}

@@ -13,15 +13,15 @@ export default async function ProfilePage() {
   return (
     <div className="max-w-2xl mx-auto space-y-8">
       <div>
-        <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">My Profile</h1>
-        <p className="text-gray-500 dark:text-slate-400 text-sm mt-1">
+        <h1 className="text-2xl font-extrabold text-white">My Profile</h1>
+        <p className="text-white/60 text-sm mt-1">
           Manage your account information and verify your residency.
         </p>
       </div>
 
       {/* Personal info card */}
       <div className="card p-6 space-y-5">
-        <h2 className="font-bold text-gray-900 dark:text-white text-lg border-b border-gray-100 dark:border-slate-700 pb-3">
+        <h2 className="font-bold text-white text-lg border-b border-white/10 pb-3">
           Personal Information
         </h2>
         <div className="grid sm:grid-cols-2 gap-4 text-sm">
@@ -47,8 +47,8 @@ export default async function ProfilePage() {
             },
           ].map(({ label, value }) => (
             <div key={label}>
-              <p className="text-xs text-gray-400 dark:text-slate-500 font-medium uppercase tracking-wide">{label}</p>
-              <p className="mt-0.5 font-medium text-gray-900 dark:text-slate-100">{value}</p>
+              <p className="text-xs text-white/50 font-medium uppercase tracking-wide">{label}</p>
+              <p className="mt-0.5 font-medium text-white">{value}</p>
             </div>
           ))}
         </div>
@@ -56,14 +56,14 @@ export default async function ProfilePage() {
 
       {/* Residency verification card */}
       <div id="residency" className="card p-6 space-y-5">
-        <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-700 pb-3">
-          <h2 className="font-bold text-gray-900 dark:text-white text-lg">Residency Verification</h2>
+        <div className="flex items-center justify-between border-b border-white/10 pb-3">
+          <h2 className="font-bold text-white text-lg">Residency Verification</h2>
           {profile.residencyVerified ? (
-            <span className="flex items-center gap-1.5 text-green-700 text-sm font-semibold">
+            <span className="flex items-center gap-1.5 text-green-400 text-sm font-semibold">
               <CheckCircle2 className="w-4 h-4" /> Verified
             </span>
           ) : (
-            <span className="flex items-center gap-1.5 text-amber-600 text-sm font-semibold">
+            <span className="flex items-center gap-1.5 text-amber-400 text-sm font-semibold">
               <XCircle className="w-4 h-4" /> Not Verified
             </span>
           )}
@@ -80,3 +80,4 @@ export default async function ProfilePage() {
     </div>
   );
 }
+

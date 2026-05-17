@@ -100,3 +100,4 @@ export default function NewApplicationButton({ label, variant = "primary", isVer
     </>
   );
 }
+

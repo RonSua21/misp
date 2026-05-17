@@ -15,11 +15,11 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 const STATUS_STYLES: Record<string, string> = {
-  OPEN:        "bg-gray-100 text-gray-700",
-  ACTIVE:      "bg-blue-100 text-blue-800",
-  FOR_CLOSURE: "bg-yellow-100 text-yellow-800",
-  CLOSED:      "bg-green-100 text-green-800",
-  REFERRED:    "bg-purple-100 text-purple-800",
+  OPEN:        "bg-white/10 text-white/60 border border-white/20",
+  ACTIVE:      "bg-blue-400/20 text-blue-300 border border-blue-400/30",
+  FOR_CLOSURE: "bg-yellow-400/20 text-yellow-300 border border-yellow-400/30",
+  CLOSED:      "bg-green-400/20 text-green-300 border border-green-400/30",
+  REFERRED:    "bg-purple-400/20 text-purple-300 border border-purple-400/30",
 };
 
 export default async function MyCasesPage() {
@@ -41,15 +41,15 @@ export default async function MyCasesPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-gray-900 dark:text-white">My Cases</h1>
-        <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Active social welfare cases managed by MSWD</p>
+        <h1 className="text-xl font-bold text-white">My Cases</h1>
+        <p className="text-sm text-white/60 mt-0.5">Active social welfare cases managed by MSWD</p>
       </div>
 
       {(!cases || cases.length === 0) && (
         <div className="text-center py-16 space-y-3">
-          <Briefcase className="w-10 h-10 text-gray-300 dark:text-slate-600 mx-auto" />
-          <p className="text-gray-500 dark:text-slate-400 font-medium">No active cases</p>
-          <p className="text-sm text-gray-400 dark:text-slate-500">If you need assistance, please visit the MSWD office.</p>
+          <Briefcase className="w-10 h-10 text-white/30 mx-auto" />
+          <p className="text-white/60 font-medium">No active cases</p>
+          <p className="text-sm text-white/50">If you need assistance, please visit the MSWD office.</p>
         </div>
       )}
 
@@ -57,19 +57,19 @@ export default async function MyCasesPage() {
         {(cases ?? []).map((c: any) => {
           const workerName = c.worker ? `${c.worker.firstName ?? ""} ${c.worker.lastName ?? ""}`.trim() : null;
           return (
-            <div key={c.id} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-4 space-y-2">
+            <div key={c.id} className="card p-4 space-y-2">
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <p className="font-semibold text-gray-800 dark:text-white text-sm">{CATEGORY_LABELS[c.category] ?? c.category}</p>
-                  <p className="text-xs font-mono text-gray-400 dark:text-slate-500">{c.caseNumber}</p>
+                  <p className="font-semibold text-white text-sm">{CATEGORY_LABELS[c.category] ?? c.category}</p>
+                  <p className="text-xs font-mono text-white/50">{c.caseNumber}</p>
                 </div>
                 <span className={`px-2 py-0.5 rounded-full text-xs font-semibold shrink-0 ${STATUS_STYLES[c.status]}`}>{c.status.replace("_", " ")}</span>
               </div>
-              <p className="text-sm text-gray-600 dark:text-slate-300 line-clamp-2">{c.description}</p>
+              <p className="text-sm text-white/70 line-clamp-2">{c.description}</p>
               {workerName && (
-                <p className="text-xs text-gray-500 dark:text-slate-400">Assigned Social Worker: {workerName}</p>
+                <p className="text-xs text-white/60">Assigned Social Worker: {workerName}</p>
               )}
-              <p className="text-xs text-gray-400 dark:text-slate-500">Opened {new Date(c.createdAt).toLocaleDateString()}</p>
+              <p className="text-xs text-white/50">Opened {new Date(c.createdAt).toLocaleDateString()}</p>
             </div>
           );
         })}
@@ -77,3 +77,4 @@ export default async function MyCasesPage() {
     </div>
   );
 }
+

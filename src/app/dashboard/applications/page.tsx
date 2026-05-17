@@ -52,8 +52,8 @@ export default async function ApplicationsPage({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">My Applications</h1>
-          <p className="text-gray-500 dark:text-slate-400 text-sm mt-1">
+          <h1 className="text-2xl font-extrabold text-white">My Applications</h1>
+          <p className="text-white/60 text-sm mt-1">
             {count ?? 0} total application{(count ?? 0) !== 1 ? "s" : ""}
           </p>
         </div>
@@ -62,8 +62,8 @@ export default async function ApplicationsPage({
 
       {(count ?? 0) === 0 ? (
         <div className="card p-12 text-center">
-          <FileText className="w-10 h-10 text-gray-300 dark:text-slate-600 mx-auto mb-3" />
-          <p className="text-gray-500 dark:text-slate-400">You have no applications yet.</p>
+          <FileText className="w-10 h-10 text-white/30 mx-auto mb-3" />
+          <p className="text-white/60">You have no applications yet.</p>
           <NewApplicationButton label="Apply Now" variant="empty-state" isVerified={profile.residencyVerified} />
         </div>
       ) : (
@@ -71,26 +71,26 @@ export default async function ApplicationsPage({
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-gray-50 dark:bg-slate-700/50 text-left">
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wide">Reference No.</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wide">Program</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wide">Purpose</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wide">Date Applied</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wide">Status</th>
+                <tr className="bg-white/5 text-left">
+                  <th className="px-6 py-3 text-xs font-semibold text-white/60 uppercase tracking-wide">Reference No.</th>
+                  <th className="px-6 py-3 text-xs font-semibold text-white/60 uppercase tracking-wide">Program</th>
+                  <th className="px-6 py-3 text-xs font-semibold text-white/60 uppercase tracking-wide">Purpose</th>
+                  <th className="px-6 py-3 text-xs font-semibold text-white/60 uppercase tracking-wide">Date Applied</th>
+                  <th className="px-6 py-3 text-xs font-semibold text-white/60 uppercase tracking-wide">Status</th>
                   <th className="px-6 py-3" />
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-slate-700">
+              <tbody className="divide-y divide-white/10">
                 {appsWithPrograms.map((app) => (
-                  <tr key={app.id} className="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-colors">
+                  <tr key={app.id} className="hover:bg-white/10 transition-colors">
                     <td className="px-6 py-4 font-mono text-xs text-makati-blue dark:text-blue-400 font-semibold whitespace-nowrap">
                       {app.referenceNumber}
                     </td>
-                    <td className="px-6 py-4 font-medium text-gray-900 dark:text-slate-100 whitespace-nowrap">
+                    <td className="px-6 py-4 font-medium text-white whitespace-nowrap">
                       {app.benefitProgram?.name ?? "—"}
                     </td>
-                    <td className="px-6 py-4 text-gray-500 dark:text-slate-400 max-w-[200px] truncate">{app.purpose}</td>
-                    <td className="px-6 py-4 text-gray-500 dark:text-slate-400 whitespace-nowrap">
+                    <td className="px-6 py-4 text-white/60 max-w-[200px] truncate">{app.purpose}</td>
+                    <td className="px-6 py-4 text-white/60 whitespace-nowrap">
                       {new Date(app.createdAt).toLocaleDateString("en-PH", {
                         year: "numeric", month: "short", day: "numeric",
                       })}
@@ -114,16 +114,16 @@ export default async function ApplicationsPage({
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between px-6 py-3 border-t border-gray-100 dark:border-slate-700">
-              <p className="text-sm text-gray-500 dark:text-slate-400">
+            <div className="flex items-center justify-between px-6 py-3 border-t border-white/10">
+              <p className="text-sm text-white/60">
                 Showing {from + 1}–{Math.min(to + 1, count ?? 0)} of {count ?? 0}
               </p>
               <div className="flex gap-1">
                 <Link
                   href={`/dashboard/applications?page=${page - 1}`}
                   aria-disabled={page <= 1}
-                  className={`p-1.5 rounded-lg border border-gray-200 dark:border-slate-600 text-gray-500 dark:text-slate-400 ${
-                    page <= 1 ? "opacity-40 pointer-events-none" : "hover:bg-gray-100 dark:hover:bg-slate-700"
+                  className={`p-1.5 rounded-lg border border-white/20 text-white/60 ${
+                    page <= 1 ? "opacity-40 pointer-events-none" : "hover:bg-white/10"
                   }`}
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -131,8 +131,8 @@ export default async function ApplicationsPage({
                 <Link
                   href={`/dashboard/applications?page=${page + 1}`}
                   aria-disabled={page >= totalPages}
-                  className={`p-1.5 rounded-lg border border-gray-200 dark:border-slate-600 text-gray-500 dark:text-slate-400 ${
-                    page >= totalPages ? "opacity-40 pointer-events-none" : "hover:bg-gray-100 dark:hover:bg-slate-700"
+                  className={`p-1.5 rounded-lg border border-white/20 text-white/60 ${
+                    page >= totalPages ? "opacity-40 pointer-events-none" : "hover:bg-white/10"
                   }`}
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -145,3 +145,4 @@ export default async function ApplicationsPage({
     </div>
   );
 }
+

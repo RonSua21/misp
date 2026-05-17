@@ -1,91 +1,52 @@
 import Link from "next/link";
 import {
-  ArrowRight,
-  Heart,
-  Stethoscope,
-  Users,
-  Accessibility,
-  ShieldCheck,
-  MapPin,
-  CheckCircle2,
-  ChevronRight,
-  Phone,
-  Clock,
+  ArrowRight, Heart, Stethoscope, Users, Accessibility,
+  ShieldCheck, MapPin, CheckCircle2, ChevronRight, Phone, Clock,
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-// ─── Data ────────────────────────────────────────────────────────────────────
-
 const services = [
   {
     icon: Heart,
     title: "Financial Assistance",
-    description:
-      "Emergency financial aid for Makati residents facing economic hardship, covering basic needs and livelihood support.",
+    description: "Emergency financial aid for Makati residents facing economic hardship, covering basic needs and livelihood support.",
     requirements: ["Valid ID", "Proof of Residency", "Income Certificate"],
-    iconBg: "bg-red-100 dark:bg-red-900/30",
-    iconColor: "text-red-600 dark:text-red-400",
-    border: "border-red-100 dark:border-red-900/40",
-    linkColor: "text-red-600 dark:text-red-400",
+    iconBg: "bg-red-400/20",
+    iconColor: "text-red-300",
   },
   {
     icon: Stethoscope,
     title: "Medical Assistance",
-    description:
-      "Support for hospitalization, medicines, and laboratory fees for qualified low-income Makati residents.",
+    description: "Support for hospitalization, medicines, and laboratory fees for qualified low-income Makati residents.",
     requirements: ["Valid ID", "Medical Certificate", "Hospital Statement"],
-    iconBg: "bg-blue-100 dark:bg-blue-900/30",
-    iconColor: "text-blue-600 dark:text-blue-400",
-    border: "border-blue-100 dark:border-blue-900/40",
-    linkColor: "text-blue-600 dark:text-blue-400",
+    iconBg: "bg-blue-400/20",
+    iconColor: "text-blue-300",
   },
   {
     icon: Users,
     title: "Senior Citizen Benefits",
-    description:
-      "Monthly stipends, burial assistance, and social activities for senior citizens aged 60 and above.",
+    description: "Monthly stipends, burial assistance, and social activities for senior citizens aged 60 and above.",
     requirements: ["Senior Citizen ID", "Proof of Residency", "Birth Certificate"],
-    iconBg: "bg-amber-100 dark:bg-amber-900/30",
-    iconColor: "text-amber-600 dark:text-amber-400",
-    border: "border-amber-100 dark:border-amber-900/40",
-    linkColor: "text-amber-600 dark:text-amber-400",
+    iconBg: "bg-amber-400/20",
+    iconColor: "text-amber-300",
   },
   {
     icon: Accessibility,
     title: "PWD Assistance",
-    description:
-      "Livelihood programs, assistive devices, and financial support for Persons with Disabilities in Makati.",
+    description: "Livelihood programs, assistive devices, and financial support for Persons with Disabilities in Makati.",
     requirements: ["PWD ID", "Medical Certificate", "Valid ID"],
-    iconBg: "bg-green-100 dark:bg-green-900/30",
-    iconColor: "text-green-600 dark:text-green-400",
-    border: "border-green-100 dark:border-green-900/40",
-    linkColor: "text-green-600 dark:text-green-400",
+    iconBg: "bg-green-400/20",
+    iconColor: "text-green-300",
   },
 ];
 
 const steps = [
-  {
-    step: "01",
-    title: "Create an Account",
-    description: "Register using your valid email address and complete your resident profile.",
-  },
-  {
-    step: "02",
-    title: "Verify Your Residency",
-    description: "Confirm your Makati City address using our built-in location verification.",
-  },
-  {
-    step: "03",
-    title: "Submit Application",
-    description: "Choose a benefit program, fill out the form, and upload required documents.",
-  },
-  {
-    step: "04",
-    title: "Track Your Status",
-    description: "Monitor your application in real-time — from Pending to Disbursed.",
-  },
+  { step: "01", title: "Create an Account", description: "Register using your valid email address and complete your resident profile." },
+  { step: "02", title: "Verify Your Residency", description: "Confirm your Makati City address using our built-in location verification." },
+  { step: "03", title: "Submit Application", description: "Choose a benefit program, fill out the form, and upload required documents." },
+  { step: "04", title: "Track Your Status", description: "Monitor your application in real-time — from Pending to Disbursed." },
 ];
 
 function formatResidents(n: number): string {
@@ -95,34 +56,13 @@ function formatResidents(n: number): string {
 }
 
 const announcements = [
-  {
-    date: "March 20, 2025",
-    tag: "New Program",
-    title: "Expanded Medical Assistance for Dialysis Patients",
-    excerpt:
-      "MSWD Makati now covers dialysis sessions for qualified beneficiaries. Apply online through MISP.",
-  },
-  {
-    date: "March 15, 2025",
-    tag: "Reminder",
-    title: "Annual Re-validation of Senior Citizen Benefits",
-    excerpt:
-      "Senior citizens must re-validate their registration by April 30. Submit requirements via MISP.",
-  },
-  {
-    date: "March 10, 2025",
-    tag: "Advisory",
-    title: "Updated PWD ID Application Requirements",
-    excerpt:
-      "New requirements now include a recent medical certificate from a licensed physician.",
-  },
+  { date: "March 20, 2026", tag: "New Program",  title: "Expanded Medical Assistance for Dialysis Patients",   excerpt: "MSWD Makati now covers dialysis sessions for qualified beneficiaries. Apply online through MISP." },
+  { date: "March 15, 2026", tag: "Reminder",     title: "Annual Re-validation of Senior Citizen Benefits",     excerpt: "Senior citizens must re-validate their registration by April 30. Submit requirements via MISP." },
+  { date: "March 10, 2026", tag: "Advisory",     title: "Updated PWD ID Application Requirements",             excerpt: "New requirements now include a recent medical certificate from a licensed physician." },
 ];
-
-// ─── Page ────────────────────────────────────────────────────────────────────
 
 export default async function LandingPage() {
   const db = createAdminClient();
-
   const [
     { count: residentCount },
     { count: approvedCount },
@@ -134,61 +74,61 @@ export default async function LandingPage() {
   ]);
 
   const totalDecided = (approvedCount ?? 0) + (rejectedCount ?? 0);
-  const accuracyPct = totalDecided > 0
-    ? `${Math.round(((approvedCount ?? 0) / totalDecided) * 100)}%`
-    : "—";
+  const accuracyPct = totalDecided > 0 ? `${Math.round(((approvedCount ?? 0) / totalDecided) * 100)}%` : "—";
 
   const stats = [
     { value: formatResidents(residentCount ?? 0), label: "Registered Residents" },
-    { value: "4",          label: "Benefit Programs" },
+    { value: "21",         label: "Benefit Programs" },
     { value: accuracyPct,  label: "Application Accuracy" },
     { value: "24/7",       label: "Online Access" },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-slate-950 transition-colors duration-300">
-      <Navbar />
+    <div className="min-h-screen flex flex-col">
+      <Navbar glass />
+
+      {/* ── FULL-PAGE BACKGROUND ─────────────────────────────────────────── */}
+      <div className="fixed inset-0 -z-10">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/makati-hall.jpg" alt="" aria-hidden className="w-full h-full object-cover object-center" />
+        <div className="absolute inset-0 bg-makati-blue/70" />
+        <div className="absolute inset-0 backdrop-blur-sm" />
+      </div>
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
-      <section className="relative bg-makati-blue overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none select-none">
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-white/5 rounded-full translate-y-1/2 -translate-x-1/3" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/[0.02] rounded-full" />
-        </div>
+      <section className="relative section">
+        <div className="container-max">
+          <div className="max-w-3xl mx-auto text-center">
 
-        <div className="container-max section relative z-10">
-          <div className="max-w-3xl mx-auto text-center text-white">
-            <div className="inline-flex items-center gap-2 bg-white/10 text-blue-100 text-xs font-medium px-3 py-1.5 rounded-full mb-6 border border-white/20">
-              <ShieldCheck className="w-3.5 h-3.5" />
+            {/* Glass pill badge */}
+            <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-xl text-white/90 text-xs font-medium px-4 py-2 rounded-full mb-8 border border-white/25 shadow-lg">
+              <ShieldCheck className="w-3.5 h-3.5 text-makati-gold" />
               Secure · Official · Makati City Government
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-white drop-shadow-lg">
               Social Welfare{" "}
               <span className="text-makati-gold">Services</span>{" "}
               Made Accessible
             </h1>
 
-            <p className="text-blue-100 text-lg leading-relaxed mb-8 max-w-2xl mx-auto">
+            <p className="text-white/80 text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
               Apply for financial, medical, senior citizen, and PWD assistance
-              programs online — anytime, anywhere. The MSWD Integrated Services
-              Portal serves every Makati City resident.
+              programs online — anytime, anywhere.
             </p>
 
-            <div className="flex flex-wrap gap-3 justify-center">
-              <Link href="/register" className="btn-primary bg-makati-gold text-makati-blue hover:bg-yellow-400 text-base px-8 py-3">
-                Get Started
-                <ArrowRight className="w-5 h-5" />
+            <div className="flex flex-wrap gap-3 justify-center mb-10">
+              <Link href="/register" className="inline-flex items-center gap-2 bg-makati-gold text-makati-blue font-bold px-8 py-3.5 rounded-2xl shadow-xl hover:bg-yellow-400 hover:scale-105 transition-all duration-200">
+                Get Started <ArrowRight className="w-5 h-5" />
               </Link>
-              <Link href="#services" className="btn-secondary bg-transparent text-white border-white/50 hover:bg-white/10 text-base px-8 py-3">
+              <Link href="#services" className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-xl text-white font-semibold px-8 py-3.5 rounded-2xl border border-white/25 shadow-lg hover:bg-white/25 transition-all duration-200">
                 View Services
               </Link>
             </div>
 
-            <div className="mt-10 flex flex-wrap gap-4 justify-center">
+            <div className="flex flex-wrap gap-5 justify-center">
               {["Data Privacy Act Compliant", "SSL Secured", "Gov-PH Verified"].map((badge) => (
-                <div key={badge} className="flex items-center gap-1.5 text-blue-200 text-xs">
+                <div key={badge} className="flex items-center gap-1.5 text-white/70 text-xs">
                   <CheckCircle2 className="w-3.5 h-3.5 text-makati-gold" />
                   {badge}
                 </div>
@@ -199,13 +139,13 @@ export default async function LandingPage() {
       </section>
 
       {/* ── STATS ─────────────────────────────────────────────────────────── */}
-      <section className="bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 transition-colors duration-300">
-        <div className="container-max px-4 py-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      <section className="pb-8">
+        <div className="container-max px-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {stats.map((s) => (
-              <div key={s.label} className="text-center">
-                <p className="text-3xl font-extrabold text-makati-blue">{s.value}</p>
-                <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">{s.label}</p>
+              <div key={s.label} className="text-center bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-xl px-4 py-6">
+                <p className="text-3xl font-extrabold text-white">{s.value}</p>
+                <p className="text-sm text-white/60 mt-1">{s.label}</p>
               </div>
             ))}
           </div>
@@ -213,51 +153,36 @@ export default async function LandingPage() {
       </section>
 
       {/* ── SERVICES ──────────────────────────────────────────────────────── */}
-      <section id="services" className="section bg-gray-50 dark:bg-slate-950 transition-colors duration-300">
+      <section id="services" className="section">
         <div className="container-max">
           <div className="text-center mb-12">
-            <span className="inline-block text-makati-blue dark:text-blue-400 font-semibold text-sm uppercase tracking-wider mb-2">
-              Our Programs
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">
-              Available Social Services
-            </h2>
-            <p className="text-gray-500 dark:text-slate-400 mt-3 max-w-xl mx-auto">
-              MSWD Makati offers four assistance programs for qualified city residents.
-              Select a program below to view eligibility and requirements.
+            <span className="inline-block text-makati-gold font-semibold text-sm uppercase tracking-wider mb-2">Our Programs</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white drop-shadow">Available Social Services</h2>
+            <p className="text-white/60 mt-3 max-w-xl mx-auto">
+              MSWD Makati offers assistance programs for qualified city residents.
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {services.map((svc) => (
-              <div
-                key={svc.title}
-                className={`card card-hover p-6 border ${svc.border} flex flex-col`}
-              >
-                <div className={`w-12 h-12 rounded-xl ${svc.iconBg} flex items-center justify-center mb-4`}>
+              <div key={svc.title} className="flex flex-col bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-xl p-6 hover:bg-white/20 hover:-translate-y-1 transition-all duration-300">
+                <div className={`w-12 h-12 rounded-2xl ${svc.iconBg} backdrop-blur flex items-center justify-center mb-4 border border-white/20`}>
                   <svc.icon className={`w-6 h-6 ${svc.iconColor}`} />
                 </div>
-                <h3 className="font-bold text-gray-900 dark:text-white mb-2">{svc.title}</h3>
-                <p className="text-gray-500 dark:text-slate-400 text-sm leading-relaxed flex-1">{svc.description}</p>
-
-                <div className="mt-4 pt-4 border-t border-gray-100 dark:border-slate-700">
-                  <p className="text-xs font-semibold text-gray-400 dark:text-slate-500 uppercase tracking-wide mb-2">
-                    Requirements
-                  </p>
+                <h3 className="font-bold text-white mb-2">{svc.title}</h3>
+                <p className="text-white/60 text-sm leading-relaxed flex-1">{svc.description}</p>
+                <div className="mt-4 pt-4 border-t border-white/10">
+                  <p className="text-xs font-semibold text-white/40 uppercase tracking-wide mb-2">Requirements</p>
                   <ul className="space-y-1">
                     {svc.requirements.map((r) => (
-                      <li key={r} className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-slate-300">
-                        <ChevronRight className="w-3 h-3 text-gray-400 dark:text-slate-500" />
+                      <li key={r} className="flex items-center gap-1.5 text-xs text-white/70">
+                        <ChevronRight className="w-3 h-3 text-makati-gold" />
                         {r}
                       </li>
                     ))}
                   </ul>
                 </div>
-
-                <Link
-                  href="/register"
-                  className={`mt-5 text-sm font-semibold flex items-center gap-1 ${svc.linkColor} hover:underline`}
-                >
+                <Link href="/register" className="mt-5 text-sm font-semibold flex items-center gap-1 text-makati-gold hover:text-yellow-300 transition-colors">
                   Apply now <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -267,95 +192,77 @@ export default async function LandingPage() {
       </section>
 
       {/* ── HOW IT WORKS ──────────────────────────────────────────────────── */}
-      <section className="section bg-white dark:bg-slate-900 transition-colors duration-300">
+      <section className="section">
         <div className="container-max">
           <div className="text-center mb-12">
-            <span className="inline-block text-makati-blue dark:text-blue-400 font-semibold text-sm uppercase tracking-wider mb-2">
-              Simple Process
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">
-              How to Apply in 4 Steps
-            </h2>
+            <span className="inline-block text-makati-gold font-semibold text-sm uppercase tracking-wider mb-2">Simple Process</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white drop-shadow">How to Apply in 4 Steps</h2>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {steps.map((step, i) => (
-              <div key={step.step} className="relative flex flex-col items-center text-center p-6">
-                {i < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-10 left-[calc(50%+3rem)] right-[-3rem] h-px bg-makati-blue-light dark:bg-blue-900/50" />
-                )}
-                <div className="w-16 h-16 rounded-full bg-makati-blue flex items-center justify-center text-white font-extrabold text-xl mb-5 shadow-lg ring-4 ring-makati-blue-light dark:ring-blue-900/40">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {steps.map((step) => (
+              <div key={step.step} className="flex flex-col items-center text-center bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-xl p-6 hover:bg-white/20 hover:-translate-y-1 transition-all duration-300">
+                <div className="w-14 h-14 rounded-full bg-makati-gold flex items-center justify-center text-makati-blue font-extrabold text-lg mb-4 shadow-lg">
                   {step.step}
                 </div>
-                <h3 className="font-bold text-gray-900 dark:text-white mb-2">{step.title}</h3>
-                <p className="text-gray-500 dark:text-slate-400 text-sm leading-relaxed">{step.description}</p>
+                <h3 className="font-bold text-white mb-2">{step.title}</h3>
+                <p className="text-white/60 text-sm leading-relaxed">{step.description}</p>
               </div>
             ))}
           </div>
 
           <div className="mt-10 text-center">
-            <Link href="/register" className="btn-primary text-base px-10 py-3">
-              Start Your Application
-              <ArrowRight className="w-5 h-5" />
+            <Link href="/register" className="inline-flex items-center gap-2 bg-makati-gold text-makati-blue font-bold px-10 py-3.5 rounded-2xl shadow-xl hover:bg-yellow-400 hover:scale-105 transition-all duration-200">
+              Start Your Application <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ── RESIDENCY VERIFICATION CALLOUT ────────────────────────────────── */}
-      <section className="section bg-blue-50 dark:bg-blue-950/30 border-y border-blue-100 dark:border-blue-900/40 transition-colors duration-300">
-        <div className="container-max">
-          <div className="flex flex-col lg:flex-row items-center gap-8">
-            <div className="w-16 h-16 rounded-2xl bg-makati-blue flex items-center justify-center shrink-0">
-              <MapPin className="w-8 h-8 text-white" />
+      {/* ── RESIDENCY CALLOUT ─────────────────────────────────────────────── */}
+      <section className="pb-8">
+        <div className="container-max px-4">
+          <div className="bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-xl p-8 flex flex-col lg:flex-row items-center gap-6">
+            <div className="w-14 h-14 rounded-2xl bg-makati-gold/20 backdrop-blur flex items-center justify-center shrink-0 border border-makati-gold/30">
+              <MapPin className="w-7 h-7 text-makati-gold" />
             </div>
             <div className="flex-1 text-center lg:text-left">
-              <h3 className="text-xl font-bold text-makati-blue dark:text-blue-400 mb-2">
-                Residency Verification — Makati City Only
-              </h3>
-              <p className="text-gray-600 dark:text-slate-300 text-sm leading-relaxed max-w-2xl">
-                All social services are exclusively for <strong className="text-gray-800 dark:text-white">Makati City residents</strong>. During
-                registration, you will be asked to verify your home address using our integrated
-                location tool. Your address must fall within the official boundaries of Makati City
-                to be eligible for any MSWD benefit program.
+              <h3 className="text-lg font-bold text-white mb-2">Residency Verification — Makati City Only</h3>
+              <p className="text-white/60 text-sm leading-relaxed">
+                All social services are exclusively for <strong className="text-white">Makati City residents</strong>.
+                Your address must fall within the official boundaries of Makati City to be eligible.
               </p>
             </div>
-            <Link href="/register" className="btn-primary shrink-0">
-              Verify My Address
-              <ArrowRight className="w-4 h-4" />
+            <Link href="/register" className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-xl text-white font-semibold px-6 py-3 rounded-2xl border border-white/25 hover:bg-white/25 transition-all shrink-0">
+              Verify My Address <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
       </section>
 
       {/* ── ANNOUNCEMENTS ─────────────────────────────────────────────────── */}
-      <section id="announcements" className="section bg-gray-50 dark:bg-slate-950 transition-colors duration-300">
+      <section id="announcements" className="section">
         <div className="container-max">
           <div className="flex items-center justify-between mb-10">
             <div>
-              <span className="inline-block text-makati-blue dark:text-blue-400 font-semibold text-sm uppercase tracking-wider mb-1">
-                Latest Updates
-              </span>
-              <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">Announcements</h2>
+              <span className="inline-block text-makati-gold font-semibold text-sm uppercase tracking-wider mb-1">Latest Updates</span>
+              <h2 className="text-3xl font-extrabold text-white drop-shadow">Announcements</h2>
             </div>
-            <Link href="/announcements" className="btn-ghost text-sm hidden sm:flex">
+            <Link href="/announcements" className="inline-flex items-center gap-1 text-white/60 hover:text-white text-sm font-medium transition-colors">
               View all <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {announcements.map((ann) => (
-              <div key={ann.title} className="card card-hover p-6">
+              <div key={ann.title} className="bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-xl p-6 hover:bg-white/20 hover:-translate-y-1 transition-all duration-300">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="badge bg-makati-blue-light dark:bg-blue-900/40 text-makati-blue dark:text-blue-400">{ann.tag}</span>
-                  <span className="text-xs text-gray-400 dark:text-slate-500">{ann.date}</span>
+                  <span className="text-xs font-semibold bg-makati-gold/20 text-makati-gold px-3 py-1 rounded-full border border-makati-gold/30">{ann.tag}</span>
+                  <span className="text-xs text-white/40">{ann.date}</span>
                 </div>
-                <h3 className="font-bold text-gray-900 dark:text-white mb-2 leading-snug">{ann.title}</h3>
-                <p className="text-gray-500 dark:text-slate-400 text-sm leading-relaxed">{ann.excerpt}</p>
-                <Link
-                  href="/announcements"
-                  className="mt-4 text-sm font-semibold text-makati-blue dark:text-blue-400 hover:underline flex items-center gap-1"
-                >
+                <h3 className="font-bold text-white mb-2 leading-snug">{ann.title}</h3>
+                <p className="text-white/60 text-sm leading-relaxed">{ann.excerpt}</p>
+                <Link href="/announcements" className="mt-4 text-sm font-semibold text-makati-gold hover:text-yellow-300 flex items-center gap-1 transition-colors">
                   Read more <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -364,38 +271,26 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* ── CTA BANNER ────────────────────────────────────────────────────── */}
-      <section className="section bg-makati-blue">
-        <div className="container-max text-center text-white">
-          <h2 className="text-3xl sm:text-4xl font-extrabold mb-4">
-            Ready to Apply for Assistance?
-          </h2>
-          <p className="text-blue-200 text-lg max-w-xl mx-auto mb-8">
-            Create your MISP account in minutes. No physical visits required for
-            initial application submission.
-          </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/register" className="btn-primary bg-makati-gold text-makati-blue hover:bg-yellow-400 text-base px-10 py-3">
-              Create Free Account
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link href="/login" className="btn-secondary bg-transparent text-white border-white/50 hover:bg-white/10 text-base px-10 py-3">
-              Sign In
-            </Link>
-          </div>
-
-          <div className="mt-10 flex flex-wrap justify-center gap-8 text-blue-200 text-sm">
-            <div className="flex items-center gap-2">
-              <Phone className="w-4 h-4 text-makati-gold" />
-              <span>(02) 8869-4000</span>
+      {/* ── CTA ───────────────────────────────────────────────────────────── */}
+      <section className="section">
+        <div className="container-max">
+          <div className="bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-2xl p-10 text-center">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 drop-shadow">Ready to Apply for Assistance?</h2>
+            <p className="text-white/60 text-lg max-w-xl mx-auto mb-8">
+              Create your MISP account in minutes. No physical visits required for initial application submission.
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center mb-10">
+              <Link href="/register" className="inline-flex items-center gap-2 bg-makati-gold text-makati-blue font-bold px-10 py-3.5 rounded-2xl shadow-xl hover:bg-yellow-400 hover:scale-105 transition-all duration-200">
+                Create Free Account <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link href="/login" className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-xl text-white font-semibold px-10 py-3.5 rounded-2xl border border-white/25 hover:bg-white/25 transition-all duration-200">
+                Sign In
+              </Link>
             </div>
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-makati-gold" />
-              <span>Mon – Fri, 8:00 AM – 5:00 PM</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-makati-gold" />
-              <span>J.P. Rizal St., Makati City</span>
+            <div className="flex flex-wrap justify-center gap-8 text-white/50 text-sm">
+              <div className="flex items-center gap-2"><Phone className="w-4 h-4 text-makati-gold" /><span>(02) 8869-4000</span></div>
+              <div className="flex items-center gap-2"><Clock className="w-4 h-4 text-makati-gold" /><span>Mon – Fri, 8:00 AM – 5:00 PM</span></div>
+              <div className="flex items-center gap-2"><MapPin className="w-4 h-4 text-makati-gold" /><span>J.P. Rizal St., Makati City</span></div>
             </div>
           </div>
         </div>

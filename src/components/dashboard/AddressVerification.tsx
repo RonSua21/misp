@@ -192,11 +192,11 @@ export default function AddressVerification({
 
   if (isVerified) {
     return (
-      <div className="flex items-start gap-3 p-4 bg-green-50 border border-green-200 rounded-xl">
-        <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
+      <div className="flex items-start gap-3 p-4 bg-green-400/10 border border-green-400/25 rounded-xl">
+        <CheckCircle2 className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
         <div>
-          <p className="font-semibold text-green-800 text-sm">Residency Verified</p>
-          <p className="text-green-700 text-sm mt-0.5">
+          <p className="font-semibold text-green-300 text-sm">Residency Verified</p>
+          <p className="text-green-300/80 text-sm mt-0.5">
             Your Makati City address is on record.{" "}
             {initialBarangay && (
               <span>
@@ -214,37 +214,37 @@ export default function AddressVerification({
   if (gpsState === "confirmed_outside") {
     return (
       <div className="space-y-4">
-        <div className="flex items-start gap-3 p-5 bg-red-50 border border-red-200 rounded-xl">
-          <XCircle className="w-6 h-6 text-red-500 shrink-0 mt-0.5" />
+        <div className="flex items-start gap-3 p-5 bg-red-400/10 border border-red-400/25 rounded-xl">
+          <XCircle className="w-6 h-6 text-red-400 shrink-0 mt-0.5" />
           <div>
-            <p className="font-bold text-red-800">Outside Makati City</p>
-            <p className="text-red-700 text-sm mt-1">{gpsMessage}</p>
-            <p className="text-red-600 text-sm mt-2">
-              MSWD benefit programs are exclusively for <strong>Makati City residents</strong>.
-              Your account has been set to <strong>Guest</strong> access.
+            <p className="font-bold text-red-300">Outside Makati City</p>
+            <p className="text-red-300/80 text-sm mt-1">{gpsMessage}</p>
+            <p className="text-red-300/70 text-sm mt-2">
+              MSWD benefit programs are exclusively for <strong className="text-red-300">Makati City residents</strong>.
+              Your account has been set to <strong className="text-red-300">Guest</strong> access.
             </p>
           </div>
         </div>
 
-        <div className="p-5 bg-gray-50 border border-gray-200 rounded-xl space-y-3">
-          <p className="font-semibold text-gray-700 text-sm">As a Guest you can still access:</p>
-          <ul className="space-y-1.5 text-sm text-gray-600">
+        <div className="p-5 bg-white/5 border border-white/15 rounded-xl space-y-3">
+          <p className="font-semibold text-white/80 text-sm">As a Guest you can still access:</p>
+          <ul className="space-y-1.5 text-sm text-white/60">
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-makati-blue shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-makati-gold shrink-0" />
               MSWD service information &amp; announcements
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-makati-blue shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-makati-gold shrink-0" />
               Emergency hotlines &amp; contact numbers
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-makati-blue shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-makati-gold shrink-0" />
               Active evacuation center locations
             </li>
           </ul>
           <a
             href="/guest"
-            className="inline-flex items-center gap-2 mt-2 text-sm font-semibold text-makati-blue hover:underline"
+            className="inline-flex items-center gap-2 mt-2 text-sm font-semibold text-makati-gold hover:underline"
           >
             Go to Guest View <ExternalLink className="w-4 h-4" />
           </a>
@@ -399,3 +399,4 @@ export default function AddressVerification({
     </div>
   );
 }
+

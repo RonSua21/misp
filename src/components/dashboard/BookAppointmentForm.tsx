@@ -81,25 +81,21 @@ export default function BookAppointmentForm() {
   }
 
   const fieldClass = (field: string) =>
-    `w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 transition-colors ${
-      errors[field]
-        ? "border-red-400 focus:ring-red-300 bg-red-50 dark:bg-red-900/10"
-        : "border-gray-300 dark:border-slate-600 dark:bg-slate-900 dark:text-white focus:ring-makati-blue"
-    }`;
+    `input ${errors[field] ? "border-red-400/60 focus:ring-red-400/30" : ""}`;
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-200 dark:border-slate-700 p-6 space-y-5">
+    <form onSubmit={handleSubmit} className="card p-6 space-y-5">
 
       {globalError && (
-        <div className="flex items-start gap-2.5 p-3.5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-sm text-red-700 dark:text-red-400">
+        <div className="flex items-start gap-2.5 p-3.5 bg-red-400/10 border border-red-400/20 rounded-xl text-sm text-red-300">
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
           {globalError}
         </div>
       )}
 
       <div>
-        <label className="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-1">
-          Service Type <span className="text-red-500">*</span>
+        <label className="label">
+          Service Type <span className="text-red-400">*</span>
         </label>
         <select
           value={serviceType}
@@ -107,14 +103,14 @@ export default function BookAppointmentForm() {
           disabled={busy}
           className={fieldClass("service")}
         >
-          {SERVICE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+          {SERVICE_OPTIONS.map(o => <option key={o.value} value={o.value} className="bg-slate-800 text-white">{o.label}</option>)}
         </select>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-1">
-            Preferred Date <span className="text-red-500">*</span>
+          <label className="label">
+            Preferred Date <span className="text-red-400">*</span>
           </label>
           <input
             type="date"
@@ -127,8 +123,8 @@ export default function BookAppointmentForm() {
           {errors.date && <p className="text-xs text-red-600 mt-1">{errors.date}</p>}
         </div>
         <div>
-          <label className="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-1">
-            Preferred Time <span className="text-red-500">*</span>
+          <label className="label">
+            Preferred Time <span className="text-red-400">*</span>
           </label>
           <select
             value={preferredTime}
@@ -136,17 +132,17 @@ export default function BookAppointmentForm() {
             disabled={busy}
             className={fieldClass("time")}
           >
-            {TIME_SLOTS.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+            {TIME_SLOTS.map(t => <option key={t.value} value={t.value} className="bg-slate-800 text-white">{t.label}</option>)}
           </select>
         </div>
       </div>
 
       <div>
         <div className="flex items-center justify-between mb-1">
-          <label className="text-sm font-semibold text-gray-700 dark:text-slate-200">
-            Notes <span className="text-gray-400 font-normal text-xs">(optional)</span>
+          <label className="label mb-0">
+            Notes <span className="text-white/40 font-normal text-xs">(optional)</span>
           </label>
-          <span className={`text-xs ${notes.length > NOTES_MAX ? "text-red-500 font-semibold" : "text-gray-400"}`}>
+          <span className={`text-xs ${notes.length > NOTES_MAX ? "text-red-400 font-semibold" : "text-white/40"}`}>
             {notes.length}/{NOTES_MAX}
           </span>
         </div>
@@ -161,30 +157,22 @@ export default function BookAppointmentForm() {
         {errors.notes && <p className="text-xs text-red-600 mt-1">{errors.notes}</p>}
       </div>
 
-      <p className="text-xs text-gray-500 dark:text-slate-400 bg-gray-50 dark:bg-slate-900/50 rounded-lg px-3 py-2">
+      <p className="text-xs text-white/50 bg-white/5 rounded-lg px-3 py-2">
         Appointments are subject to availability. You will be notified once confirmed by MSWD staff.
       </p>
 
       <div className="flex gap-3 pt-1">
-        <button
-          type="submit"
-          disabled={busy}
-          className="inline-flex items-center gap-2 bg-makati-blue text-white font-semibold py-3 px-6 rounded-xl hover:bg-blue-800 active:scale-95 transition-all disabled:opacity-50 text-sm"
-        >
+        <button type="submit" disabled={busy} className="btn-primary">
           {busy
             ? <><Loader2 className="w-4 h-4 animate-spin" /> Booking…</>
             : <><CalendarDays className="w-4 h-4" /> Book Appointment</>
           }
         </button>
-        <button
-          type="button"
-          disabled={busy}
-          onClick={() => router.back()}
-          className="text-sm text-gray-500 dark:text-slate-400 px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
-        >
+        <button type="button" disabled={busy} onClick={() => router.back()} className="btn-secondary">
           Cancel
         </button>
       </div>
     </form>
   );
 }
+

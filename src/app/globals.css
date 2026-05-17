@@ -6,19 +6,14 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    transition: background-color 0.3s ease, color 0.3s ease;
     max-width: 100vw;
     overflow-x: hidden;
   }
 
   body {
-    @apply font-sans text-gray-800 bg-white antialiased transition-colors duration-300;
+    @apply font-sans antialiased;
     max-width: 100vw;
     overflow-x: hidden;
-  }
-
-  .dark body {
-    @apply bg-slate-950 text-slate-100;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -30,64 +25,64 @@
   /* ── Buttons ───────────────────────────────────────── */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2
-           bg-makati-blue text-white font-semibold
-           px-6 py-2.5 rounded-lg shadow-sm
-           hover:bg-makati-blue-dark active:scale-95
-           transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+           bg-makati-gold text-makati-blue font-bold
+           px-6 py-2.5 rounded-2xl shadow-xl
+           hover:bg-yellow-400 hover:scale-105 active:scale-95
+           transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2
-           bg-white text-makati-blue font-semibold
-           border border-makati-blue
-           px-6 py-2.5 rounded-lg
-           hover:bg-makati-blue-light active:scale-95
+           bg-white/15 backdrop-blur-xl text-white font-semibold
+           border border-white/25
+           px-6 py-2.5 rounded-2xl
+           hover:bg-white/25 active:scale-95
            transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2
-           text-makati-blue font-medium px-4 py-2 rounded-lg
-           hover:bg-makati-blue-light active:scale-95
+           text-white/80 font-medium px-4 py-2 rounded-xl
+           hover:bg-white/10 active:scale-95
            transition-all duration-150;
   }
 
   /* ── Form inputs ───────────────────────────────────── */
   .input {
-    @apply w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white dark:bg-slate-800 dark:border-slate-600
-           text-gray-900 dark:text-slate-100 placeholder-gray-400 dark:placeholder-slate-500 text-sm
-           focus:outline-none focus:ring-2 focus:ring-makati-blue focus:border-transparent
-           disabled:bg-gray-50 dark:disabled:bg-slate-700 disabled:text-gray-500
+    @apply w-full px-4 py-2.5 rounded-xl border border-white/20 bg-white/10 backdrop-blur-md
+           text-white placeholder-white/40 text-sm
+           focus:outline-none focus:ring-2 focus:ring-makati-gold/50 focus:border-makati-gold/40
+           disabled:opacity-50 disabled:cursor-not-allowed
            transition-all duration-150;
   }
 
   .input-error {
-    @apply border-red-500 focus:ring-red-500;
+    @apply border-red-400/60 focus:ring-red-400/50;
   }
 
   .label {
-    @apply block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1;
+    @apply block text-sm font-medium text-white/80 mb-1;
   }
 
   /* ── Cards ─────────────────────────────────────────── */
   .card {
-    @apply bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 shadow-card;
+    @apply bg-white/10 backdrop-blur-2xl rounded-2xl border border-white/15 shadow-xl;
   }
 
   .card-hover {
-    @apply hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200;
+    @apply hover:bg-white/20 hover:-translate-y-1 transition-all duration-300;
   }
 
   /* ── Badge ─────────────────────────────────────────── */
   .badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold;
   }
 
-  .badge-pending    { @apply badge bg-yellow-100 text-yellow-800; }
-  .badge-review     { @apply badge bg-blue-100   text-blue-800; }
-  .badge-approved   { @apply badge bg-green-100  text-green-800; }
-  .badge-rejected   { @apply badge bg-red-100    text-red-800; }
-  .badge-disbursed  { @apply badge bg-purple-100 text-purple-800; }
+  .badge-pending   { @apply badge bg-yellow-400/20 text-yellow-300 border border-yellow-400/30; }
+  .badge-review    { @apply badge bg-blue-400/20   text-blue-300   border border-blue-400/30; }
+  .badge-approved  { @apply badge bg-green-400/20  text-green-300  border border-green-400/30; }
+  .badge-rejected  { @apply badge bg-red-400/20    text-red-300    border border-red-400/30; }
+  .badge-disbursed { @apply badge bg-purple-400/20 text-purple-300 border border-purple-400/30; }
 
   /* ── Section ───────────────────────────────────────── */
   .section {
@@ -97,7 +92,7 @@
     @apply max-w-7xl mx-auto;
   }
 
-  /* ── Hide scrollbar but keep scroll functionality ── */
+  /* ── Hide scrollbar ────────────────────────────────── */
   .scrollbar-none {
     scrollbar-width: none;
     -ms-overflow-style: none;

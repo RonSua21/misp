@@ -9,8 +9,9 @@ export default async function NewAppointmentPage() {
 
   return (
     <div className="max-w-lg mx-auto">
-      <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Book an Appointment</h1>
+      <h1 className="text-xl font-bold text-white mb-6">Book an Appointment</h1>
       <BookAppointmentForm />
     </div>
   );
 }
+
