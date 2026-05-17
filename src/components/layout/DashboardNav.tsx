@@ -124,7 +124,6 @@ export default function DashboardNav({ userEmail }: { userEmail: string }) {
 
       {/* ── Desktop sidebar ───────────────────────────────── */}
       <aside
-        style={{ contain: "paint" }}
         className="
           fixed inset-y-0 left-0 z-40 hidden md:flex flex-col
           w-16 hover:w-56

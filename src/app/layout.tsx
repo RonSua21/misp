@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className="overflow-x-clip">
+    <html lang="en" suppressHydrationWarning>
       <body className="overflow-x-clip">
         <ThemeProvider>{children}</ThemeProvider>
       </body>
